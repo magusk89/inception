@@ -1,0 +1,74 @@
+services:
+
+  redis:
+    build:
+      context: ./requirements/bonus/redis
+    image: redis
+    container_name: redis
+    restart: on-failure
+    expose:
+      - "6379"
+    networks:
+      - inception
+
+  ftp:
+    build:
+      context: ./requirements/bonus/ftp
+    image: ftp
+    container_name: ftp
+    restart: on-failure
+    env_file: .env
+    secrets:
+      - ftp_credentials
+    volumes:
+      - wp_data:/var/www/html
+    ports:
+      - "21:21"
+      - "21100-21110:21100-21110"
+    networks:
+      - inception
+
+  static-site:
+    build:
+      context: ./requirements/bonus/static-site
+    image: static-site
+    container_name: static-site
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    networks:
+      - inception
+
+  adminer:
+    build:
+      context: ./requirements/bonus/adminer
+    image: adminer
+    container_name: adminer
+    restart: on-failure
+    ports:
+      - "8081:8081"
+    networks:
+      - inception
+    depends_on:
+      - mariadb
+
+  monilite:
+    build:
+      context: ./requirements/bonus/monilite
+    image: monilite
+    container_name: monilite
+    restart: on-failure
+    expose:
+      - "8000"
+    networks:
+      - inception
+
+  nginx:
+    volumes:
+      - ./requirements/bonus/monilite/monilite.conf:/etc/nginx/conf.d/monilite.conf:ro
+    ports:
+      - "8443:8443"
+
+secrets:
+  ftp_credentials:
+    file: ../secrets/ftp_credentials.txt
