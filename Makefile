@@ -13,19 +13,19 @@ bonus:
 	docker compose -p inception -f srcs/docker-compose.yml -f srcs/docker-compose.bonus.yml up --build -d
 
 down:
-	docker compose -p inception -f srcs/docker-compose.yml down
+	docker compose -p inception -f srcs/docker-compose.yml -f srcs/docker-compose.bonus.yml down
 
 logs:
-	docker compose -p inception -f srcs/docker-compose.yml logs -f
+	docker compose -p inception -f srcs/docker-compose.yml -f srcs/docker-compose.bonus.yml logs -f
 
 ps:
-	docker compose -p inception -f srcs/docker-compose.yml ps
+	docker compose -p inception -f srcs/docker-compose.yml -f srcs/docker-compose.bonus.yml ps
 
 clean: down
-	docker image rm -f nginx wordpress mariadb 2>/dev/null || true
+	docker image rm -f nginx wordpress mariadb redis ftp static-site adminer monilite 2>/dev/null || true
 
 fclean: clean
-	docker compose -p inception -f srcs/docker-compose.yml down -v
+	docker compose -p inception -f srcs/docker-compose.yml -f srcs/docker-compose.bonus.yml down -v
 	rm -rf /home/alebarbo/data/db/*
 	rm -rf /home/alebarbo/data/wordpress/*
 

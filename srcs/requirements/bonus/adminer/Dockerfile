@@ -16,4 +16,4 @@ RUN mkdir -p /var/www/adminer \
 
 EXPOSE 8081
 
-CMD ["php8.2", "-S", "0.0.0.0:8081", "-t", "/var/www/adminer"]
+ENTRYPOINT ["php8.2", "-S", "0.0.0.0:8081", "-t", "/var/www/adminer"]

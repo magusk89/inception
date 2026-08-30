@@ -52,9 +52,19 @@ mandatory is confirmed perfect. Once running:
 
 - **Redis** — works automatically in the background once WordPress's
   object-cache plugin points at it; no direct interaction needed.
-- **FTP** — connect with any FTP client to the VM's IP address on port
-  21, using the username and password in `secrets/ftp_credentials.txt`.
-  If your client needs a passive port range, it's 21100–21110.
+- **FTP** — connect from the VM itself (passive mode is pinned to
+  `127.0.0.1`, so this only works locally):
+  ```
+  curl -u alebarbo_ftp:Wp42Secure_FtpPass1 ftp://alebarbo.42.fr/
+  ```
+  To upload and confirm it lands in the live site's files:
+  ```
+  echo "hello from ftp" > test.txt
+  curl -u alebarbo_ftp:Wp42Secure_FtpPass1 -T test.txt ftp://alebarbo.42.fr/
+  curl -k https://alebarbo.42.fr/test.txt
+  ```
+  Credentials are in `secrets/ftp_credentials.txt`. The passive port
+  range is 21100–21110 if your client asks.
 - **Static site** — visit `http://<VM IP>:8080` directly. It runs
   outside NGINX/TLS in this setup, so it's plain HTTP.
 - **Adminer** — visit `http://<VM IP>:8081`, log in with server

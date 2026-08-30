@@ -6,6 +6,10 @@ FTP_PASS=$(sed -n '2p' /run/secrets/ftp_credentials)
 
 touch /etc/vsftpd.user_list
 
+mkdir -p /var/run/vsftpd/empty
+chmod 0755 /var/run/vsftpd/empty
+chown root:root /var/run/vsftpd/empty
+
 if ! id "${FTP_USER}" >/dev/null 2>&1; then
     adduser --disabled-password --gecos "" --home /var/www/html "${FTP_USER}"
     echo "${FTP_USER}:${FTP_PASS}" | chpasswd

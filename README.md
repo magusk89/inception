@@ -28,7 +28,7 @@ development/build workflow.
 - [WP-CLI documentation](https://wp-cli.org/)
 - [NGINX documentation](https://nginx.org/en/docs/)
 
-AI assistance was used to generate this README and the DEV_DOC and USER_DOC files.
+AI assistance was used to elaborate this README and the DEV_DOC and USER_DOC files.
 
 ## Project description: design choices
 
@@ -88,6 +88,13 @@ mandatory site. It's also directly useful for this project specifically:
 a way to actually watch the VM's resource usage while the stack runs,
 which is the kind of thing you'd otherwise have to SSH in and check
 manually.
+
+One caveat worth knowing for defense: MONILite has no authentication of
+its own (confirmed in its documented API surface), and it runs on
+Flask's built-in development server rather than a production WSGI
+server — both reasonable trade-offs for a personal learning VM behind
+TLS, not something to expose on a public-facing host without adding an
+auth layer at the NGINX level first.
 
 Bonus services are not started by the default `make` target, since the
 subject only evaluates the bonus part once the mandatory part is

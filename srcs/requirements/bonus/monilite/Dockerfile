@@ -11,4 +11,4 @@ RUN python3 -m venv /opt/monilite-venv \
 
 EXPOSE 8000
 
-CMD ["/opt/monilite-venv/bin/monilite", "serve", "--host", "0.0.0.0", "--port", "8000", "--no-gpu"]
+ENTRYPOINT ["/opt/monilite-venv/bin/monilite", "serve", "--host", "0.0.0.0", "--port", "8000", "--no-gpu"]
