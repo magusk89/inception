@@ -1,1 +1,2207 @@
-<!DOCTYPE html><html><head><title>42 Inception</title></head><body><h1>Static bonus site</h1></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inception — 42 project guide</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+<style>
+:root{
+  --bg:#0b0d10; --surface:#12151a; --surface-2:#181c22; --border:#242932;
+  --border-strong:#333a46; --text:#e7e9ec; --text-2:#a6adba; --text-3:#6b7280;
+  --accent:#5b8def; --accent-dim:#2a3a54; --green:#4ade80; --amber:#fbbf24; --red:#f87171;
+  --mono:'SF Mono',ui-monospace,'Cascadia Code',Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  --radius:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--sans); background:var(--bg); color:var(--text);
+  line-height:1.65; font-size:16px; display:flex; min-height:100vh;
+}
+::selection{background:var(--accent-dim);}
+
+.sidebar{
+  width:280px; flex-shrink:0; background:var(--surface); border-right:1px solid var(--border);
+  height:100vh; position:sticky; top:0; overflow-y:auto; padding:24px 0 40px;
+}
+.sidebar-brand{
+  padding:0 20px 20px; display:flex; align-items:center; gap:10px;
+  border-bottom:1px solid var(--border); margin-bottom:16px;
+}
+.sidebar-brand i{font-size:22px; color:var(--accent);}
+.sidebar-brand span{font-weight:600; font-size:15px; letter-spacing:.2px;}
+.sidebar-brand small{display:block; color:var(--text-3); font-size:11px; font-weight:400;}
+.nav-group{margin-bottom:4px;}
+.nav-group-label{
+  padding:14px 20px 6px; font-size:11px; text-transform:uppercase; letter-spacing:.08em;
+  color:var(--text-3); font-weight:600;
+}
+.nav-link{
+  display:flex; align-items:center; gap:10px; padding:7px 20px; color:var(--text-2);
+  text-decoration:none; font-size:13.5px; border-left:2px solid transparent; transition:.12s;
+}
+.nav-link:hover{color:var(--text); background:var(--surface-2);}
+.nav-link.active{color:var(--accent); border-left-color:var(--accent); background:var(--accent-dim);}
+.nav-link i{font-size:16px; width:16px; text-align:center; opacity:.8;}
+
+.main{flex:1; min-width:0;}
+.topbar{
+  position:sticky; top:0; z-index:10; background:rgba(11,13,16,.85); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border); padding:14px 40px; display:flex; align-items:center;
+  justify-content:space-between; gap:16px;
+}
+.topbar-title{font-size:13px; color:var(--text-2);}
+.btn{
+  display:inline-flex; align-items:center; gap:6px; padding:8px 14px; border-radius:var(--radius);
+  border:1px solid var(--border-strong); background:var(--surface-2); color:var(--text);
+  text-decoration:none; font-size:13.5px; font-weight:500; cursor:pointer; transition:.12s;
+}
+.btn:hover{border-color:var(--accent); color:var(--accent);}
+.btn-primary{background:var(--accent); border-color:var(--accent); color:#fff;}
+.btn-primary:hover{background:#4a7de0; color:#fff;}
+.btn i{font-size:15px;}
+
+.content{max-width:880px; margin:0 auto; padding:48px 40px 120px;}
+section{margin-bottom:64px; scroll-margin-top:80px;}
+section:first-of-type{margin-top:0;}
+
+h1.page-title{font-size:34px; font-weight:700; margin-bottom:10px; letter-spacing:-.5px;}
+.subtitle{color:var(--text-2); font-size:16px; margin-bottom:28px;}
+h2{
+  font-size:24px; font-weight:650; margin-bottom:16px; padding-top:4px;
+  display:flex; align-items:center; gap:10px; letter-spacing:-.2px;
+}
+h2 .chip{
+  font-size:11px; padding:2px 8px; border-radius:20px; background:var(--surface-2);
+  border:1px solid var(--border-strong); color:var(--text-2); font-weight:600;
+}
+h3{font-size:17px; font-weight:650; margin:28px 0 10px;}
+h4{font-size:14.5px; font-weight:650; margin:20px 0 8px; color:var(--text-2); text-transform:uppercase; letter-spacing:.04em;}
+p{margin-bottom:14px; color:var(--text-2);}
+p strong, li strong{color:var(--text); font-weight:600;}
+a{color:var(--accent); text-decoration:none;}
+a:hover{text-decoration:underline;}
+ul,ol{margin:0 0 14px 22px; color:var(--text-2);}
+li{margin-bottom:6px;}
+code:not(pre code){
+  background:var(--surface-2); border:1px solid var(--border); padding:1px 6px; border-radius:4px;
+  font-family:var(--mono); font-size:13px; color:#e5c07b;
+}
+
+.callout{
+  display:flex; gap:12px; padding:14px 16px; border-radius:var(--radius); margin:16px 0 20px;
+  border:1px solid var(--border); background:var(--surface);
+}
+.callout i{font-size:18px; flex-shrink:0; margin-top:2px;}
+.callout p{margin:0; font-size:14px; color:var(--text-2);}
+.callout p:not(:last-child){margin-bottom:8px;}
+.callout-info{border-color:#2a4a6a; background:#0f1e2e;}
+.callout-info i{color:#6bb0f0;}
+.callout-warn{border-color:#5a4419; background:#241c0a;}
+.callout-warn i{color:var(--amber);}
+.callout-rule{border-color:#2a4a2a; background:#0e1e0e;}
+.callout-rule i{color:var(--green);}
+
+.card-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin:20px 0;}
+.card{
+  background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:18px;
+}
+.card i{font-size:20px; color:var(--accent); margin-bottom:10px; display:block;}
+.card h4{margin:0 0 6px; color:var(--text); text-transform:none; font-size:14.5px; letter-spacing:0;}
+.card p{font-size:13px; margin:0; color:var(--text-3);}
+
+.code-block{
+  position:relative; margin:16px 0 22px; border-radius:10px; overflow:hidden;
+  border:1px solid var(--border); background:#0d0f13;
+}
+.code-header{
+  display:flex; align-items:center; justify-content:space-between; padding:9px 14px;
+  background:var(--surface-2); border-bottom:1px solid var(--border);
+}
+.code-filename{
+  font-family:var(--mono); font-size:12.5px; color:var(--text-2); display:flex; align-items:center; gap:8px;
+}
+.code-filename i{font-size:14px; color:var(--text-3);}
+.code-actions{display:flex; gap:6px;}
+.copy-btn{
+  display:flex; align-items:center; gap:5px; background:transparent; border:1px solid var(--border-strong);
+  color:var(--text-2); font-size:11.5px; padding:4px 9px; border-radius:6px; cursor:pointer; transition:.12s;
+  font-family:var(--sans);
+}
+.copy-btn:hover{border-color:var(--accent); color:var(--accent);}
+.copy-btn i{font-size:13px;}
+pre{margin:0 !important; max-height:520px; overflow:auto;}
+pre code{font-size:12.8px !important; line-height:1.6 !important;}
+.code-block pre{background:#0d0f13 !important;}
+
+.tree{
+  font-family:var(--mono); font-size:12.8px; background:#0d0f13; border:1px solid var(--border);
+  border-radius:10px; padding:16px 18px; color:var(--text-2); line-height:1.7; overflow-x:auto; margin:16px 0 22px;
+  white-space:pre;
+}
+.tree .dir{color:#6bb0f0;}
+.tree .file{color:var(--text-2);}
+.tree .comment{color:var(--text-3);}
+
+table{width:100%; border-collapse:collapse; margin:16px 0 22px; font-size:13.5px;}
+th{
+  text-align:left; padding:9px 12px; background:var(--surface-2); color:var(--text-2);
+  font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:.03em; border-bottom:1px solid var(--border-strong);
+}
+td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text-2); vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+td code, th code{font-size:12px;}
+
+.checklist{list-style:none; margin:0 0 22px; padding:0;}
+.checklist li{
+  display:flex; align-items:flex-start; gap:10px; padding:9px 0; border-bottom:1px solid var(--border);
+  font-size:13.8px; color:var(--text-2);
+}
+.checklist li:last-child{border-bottom:none;}
+.checklist i{color:var(--green); font-size:16px; margin-top:2px; flex-shrink:0;}
+.checklist .rule-text{color:var(--text);}
+.checklist .rule-note{display:block; color:var(--text-3); font-size:12.5px; margin-top:2px;}
+
+.diagram-wrap{
+  background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:24px;
+  margin:20px 0 26px; overflow-x:auto;
+}
+
+.resource-list{list-style:none; margin:0 0 22px;}
+.resource-list li{
+  display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--border); font-size:14px;
+}
+.resource-list li:last-child{border-bottom:none;}
+.resource-list i{color:var(--text-3); font-size:16px;}
+.resource-list a{color:var(--text); font-weight:500;}
+.resource-list a:hover{color:var(--accent);}
+.resource-list span{color:var(--text-3); font-size:12.5px; margin-left:auto;}
+
+.badge{
+  display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:600; padding:2px 9px;
+  border-radius:20px; background:var(--accent-dim); color:var(--accent); margin-left:8px; vertical-align:middle;
+}
+.badge-bonus{background:#2a1f3d; color:#c084fc;}
+
+hr.divider{border:none; border-top:1px solid var(--border); margin:36px 0;}
+
+.step-num{
+  display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%;
+  background:var(--accent-dim); color:var(--accent); font-size:12px; font-weight:700; margin-right:8px; flex-shrink:0;
+}
+.step{display:flex; gap:0; margin-bottom:16px; align-items:flex-start;}
+.step-content{flex:1;}
+.step-content p{margin-bottom:6px;}
+
+footer{
+  border-top:1px solid var(--border); padding:32px 40px; text-align:center; color:var(--text-3); font-size:13px;
+}
+
+@media (max-width:900px){
+  .sidebar{position:fixed; left:-280px; z-index:100; transition:.2s; box-shadow:0 0 40px rgba(0,0,0,.5);}
+  .sidebar.open{left:0;}
+  .content{padding:32px 20px 100px;}
+  .topbar{padding:12px 16px;}
+}
+.menu-toggle{display:none; background:transparent; border:none; color:var(--text); font-size:22px; cursor:pointer;}
+@media (max-width:900px){.menu-toggle{display:block;}}
+</style>
+</head>
+<body>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <i class="ti ti-cube"></i>
+    <div><span>Inception</span><small>42 project guide</small></div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Overview</div>
+    <a class="nav-link" href="#intro"><i class="ti ti-home"></i>Introduction</a>
+    <a class="nav-link" href="#architecture"><i class="ti ti-topology-star-3"></i>Architecture</a>
+    <a class="nav-link" href="#directory"><i class="ti ti-folder-open"></i>Directory layout</a>
+    <a class="nav-link" href="#checklist"><i class="ti ti-checklist"></i>Compliance checklist</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Dockerfile basics</div>
+    <a class="nav-link" href="#dockerfile-instructions"><i class="ti ti-file-code"></i>Every instruction</a>
+    <a class="nav-link" href="#compose-basics"><i class="ti ti-stack-2"></i>Compose fields</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Mandatory part</div>
+    <a class="nav-link" href="#mariadb"><i class="ti ti-database"></i>MariaDB</a>
+    <a class="nav-link" href="#wordpress"><i class="ti ti-brand-wordpress"></i>WordPress + php-fpm</a>
+    <a class="nav-link" href="#nginx"><i class="ti ti-shield-lock"></i>NGINX + TLS</a>
+    <a class="nav-link" href="#compose-file"><i class="ti ti-file-type-yml"></i>docker-compose.yml</a>
+    <a class="nav-link" href="#env-secrets"><i class="ti ti-key"></i>.env &amp; secrets</a>
+    <a class="nav-link" href="#makefile"><i class="ti ti-terminal-2"></i>Makefile</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Bonus part <span class="badge badge-bonus">optional</span></div>
+    <a class="nav-link" href="#bonus"><i class="ti ti-sparkles"></i>Overview</a>
+    <a class="nav-link" href="#bonus-redis"><i class="ti ti-bolt"></i>Redis cache</a>
+    <a class="nav-link" href="#bonus-ftp"><i class="ti ti-upload"></i>FTP server</a>
+    <a class="nav-link" href="#bonus-static"><i class="ti ti-browser"></i>Static site</a>
+    <a class="nav-link" href="#bonus-adminer"><i class="ti ti-tool"></i>Adminer</a>
+    <a class="nav-link" href="#bonus-monilite"><i class="ti ti-activity"></i>MONILite</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Docs &amp; submission</div>
+    <a class="nav-link" href="#readme"><i class="ti ti-markdown"></i>README.md</a>
+    <a class="nav-link" href="#userdoc-devdoc"><i class="ti ti-book-2"></i>USER_DOC / DEV_DOC</a>
+    <a class="nav-link" href="#pitfalls"><i class="ti ti-alert-triangle"></i>Common pitfalls</a>
+    <a class="nav-link" href="#eval-readiness"><i class="ti ti-clipboard-check"></i>Evaluation readiness</a>
+    <a class="nav-link" href="#resources"><i class="ti ti-external-link"></i>Resources</a>
+  </div>
+</nav>
+
+<div class="main">
+  <div class="topbar">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')"><i class="ti ti-menu-2"></i></button>
+      <span class="topbar-title">42 School — System Administration</span>
+    </div>
+  </div>
+
+  <div class="content">
+
+    
+<section id="intro">
+  <h1 class="page-title">Inception</h1>
+  <p class="subtitle">A complete, annotated guide to the 42 School Inception project — Docker, docker-compose, Dockerfiles, and the Makefile that ties it together. Debian-based. Includes the bonus part.</p>
+
+  <div class="callout callout-info">
+    <i class="ti ti-info-circle"></i>
+    <div>
+      <p><strong>Scope of this guide.</strong> It assumes your VM is already set up and Docker is installed. It focuses entirely on the artifacts you write: Dockerfiles, docker-compose.yml, the Makefile, entrypoint scripts, and the required documentation files.</p>
+      <p>Treat every file shown here as a reference implementation to learn from — read every line, understand it, and adapt it. Submitting AI-generated files you can't explain is exactly the failure mode the subject's own AI Instructions chapter warns about.</p>
+    </div>
+  </div>
+
+  <div class="callout callout-rule">
+    <i class="ti ti-flag-3"></i>
+    <div>
+      <p>This revision folds in every fix found while actually debugging a running deployment: the <code>policy-rc.d</code> stub so MariaDB's package install doesn't try to start its own daemon mid-build, <code>/run/php</code> and <code>/run/mysqld</code> created explicitly since nothing creates them without <code>systemd</code>, a WordPress entrypoint that checks each install step independently instead of gating everything on one file's existence, and a pinned Compose project name so <code>fclean</code> can actually find the volumes it's supposed to remove. The config files also carry zero comments by design, which structurally rules out one bug from this list: a stray <code>#</code> in a php-fpm pool file (which only recognizes <code>;</code>) caused a parser failure that took a whole debugging round to track down.</p>
+    </div>
+  </div>
+
+  <h3>What you're building</h3>
+  <p>Three containers, each built from your own Dockerfile on a Debian base, talking to each other over a private Docker network, with two named volumes for persistent data, all sitting behind a single TLS entry point.</p>
+
+  <div class="card-grid">
+    <div class="card"><i class="ti ti-shield-lock"></i><h4>NGINX</h4><p>TLSv1.2/1.3 only. The sole entry point, port 443.</p></div>
+    <div class="card"><i class="ti ti-brand-wordpress"></i><h4>WordPress + php-fpm</h4><p>No nginx bundled in this container. Configured via WP-CLI.</p></div>
+    <div class="card"><i class="ti ti-database"></i><h4>MariaDB</h4><p>No nginx bundled. Two DB users, one admin with a non-obvious name.</p></div>
+  </div>
+</section>
+
+
+<section id="architecture">
+  <h2><i class="ti ti-topology-star-3"></i>Architecture</h2>
+  <p>All three containers share one custom bridge network. NGINX is the only container that publishes a port to the host. Internally, containers address each other by service name — Docker's embedded DNS resolves <code>mariadb</code> and <code>wordpress</code> to the right container IP automatically.</p>
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img">
+      <title>Inception network architecture</title>
+      <desc>NGINX exposed on port 443 to the internet, connected internally to WordPress on port 9000, which connects to MariaDB on port 3306. WordPress and MariaDB each have a named volume. All three sit inside a custom bridge network on the host.</desc>
+      <text x="360" y="26" text-anchor="middle" font-size="13" fill="#a6adba" font-family="sans-serif">Internet</text>
+      <line x1="360" y1="34" x2="360" y2="62" stroke="#333a46" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <text x="378" y="52" font-size="11" fill="#6b7280" font-family="monospace">443</text>
+      <rect x="30" y="70" width="660" height="240" rx="12" fill="none" stroke="#242932" stroke-width="1"/>
+      <text x="46" y="94" font-size="12" fill="#6b7280" font-family="sans-serif" font-weight="600">host — custom bridge network "inception"</text>
+      <g>
+        <rect x="290" y="110" width="140" height="56" rx="8" fill="#0f1e2e" stroke="#2a4a6a"/>
+        <text x="360" y="133" text-anchor="middle" font-size="13" fill="#6bb0f0" font-family="sans-serif" font-weight="600">nginx</text>
+        <text x="360" y="150" text-anchor="middle" font-size="10.5" fill="#6bb0f0" font-family="sans-serif">TLS 1.2 / 1.3</text>
+      </g>
+      <line x1="360" y1="166" x2="360" y2="196" stroke="#333a46" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <text x="378" y="184" font-size="11" fill="#6b7280" font-family="monospace">9000</text>
+      <g>
+        <rect x="290" y="200" width="140" height="56" rx="8" fill="#1e2a12" stroke="#3d5a1f"/>
+        <text x="360" y="223" text-anchor="middle" font-size="13" fill="#9bd15f" font-family="sans-serif" font-weight="600">wordpress</text>
+        <text x="360" y="240" text-anchor="middle" font-size="10.5" fill="#9bd15f" font-family="sans-serif">php-fpm : 9000</text>
+      </g>
+      <line x1="430" y1="228" x2="470" y2="228" stroke="#333a46" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <text x="440" y="220" font-size="11" fill="#6b7280" font-family="monospace">3306</text>
+      <g>
+        <rect x="470" y="200" width="140" height="56" rx="8" fill="#2a1f3d" stroke="#5b3d8a"/>
+        <text x="540" y="223" text-anchor="middle" font-size="13" fill="#c084fc" font-family="sans-serif" font-weight="600">mariadb</text>
+        <text x="540" y="240" text-anchor="middle" font-size="10.5" fill="#c084fc" font-family="sans-serif">:3306</text>
+      </g>
+      <g>
+        <rect x="110" y="200" width="120" height="56" rx="8" fill="#241c0a" stroke="#5a4419"/>
+        <text x="170" y="223" text-anchor="middle" font-size="12" fill="#fbbf24" font-family="sans-serif" font-weight="600">wp_data</text>
+        <text x="170" y="240" text-anchor="middle" font-size="10" fill="#fbbf24" font-family="sans-serif">named volume</text>
+      </g>
+      <line x1="230" y1="228" x2="290" y2="228" stroke="#333a46" stroke-width="1.5"/>
+      <g>
+        <rect x="470" y="110" width="120" height="56" rx="8" fill="#241c0a" stroke="#5a4419"/>
+        <text x="530" y="133" text-anchor="middle" font-size="12" fill="#fbbf24" font-family="sans-serif" font-weight="600">db_data</text>
+        <text x="530" y="150" text-anchor="middle" font-size="10" fill="#fbbf24" font-family="sans-serif">named volume</text>
+      </g>
+      <line x1="540" y1="200" x2="540" y2="166" stroke="#333a46" stroke-width="1.5"/>
+      <text x="360" y="326" text-anchor="middle" font-size="10.5" fill="#6b7280" font-family="monospace">volumes bind-mounted at /home/&lt;login&gt;/data on the host</text>
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#333a46"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+
+  <ul class="checklist">
+    <li><i class="ti ti-circle-check"></i><span><span class="rule-text">Only <code>nginx</code> publishes a port</span><span class="rule-note">mariadb and wordpress use <code>expose:</code>, never <code>ports:</code></span></span></li>
+    <li><i class="ti ti-circle-check"></i><span><span class="rule-text">One custom bridge network, no <code>network: host</code>, no <code>--link</code></span></span></li>
+    <li><i class="ti ti-circle-check"></i><span><span class="rule-text">Two named volumes, pinned to <code>/home/&lt;login&gt;/data</code></span><span class="rule-note">via <code>driver_opts</code> — never a raw bind mount under a service</span></span></li>
+  </ul>
+</section>
+
+
+<section id="directory">
+  <h2><i class="ti ti-folder-open"></i>Directory layout</h2>
+  <p>This is exactly the structure the subject's example diagram expects.</p>
+  <div class="tree">.
+├── <span class="file">Makefile</span>
+├── <span class="file">README.md</span>
+├── <span class="file">USER_DOC.md</span>
+├── <span class="file">DEV_DOC.md</span>
+├── <span class="file">.gitignore</span>
+├── <span class="dir">secrets/</span>                          <span class="comment"># gitignored — never committed</span>
+│   ├── <span class="file">credentials.txt</span>
+│   ├── <span class="file">db_password.txt</span>
+│   ├── <span class="file">db_root_password.txt</span>
+│   └── <span class="file">ftp_credentials.txt</span>          <span class="comment"># bonus only</span>
+└── <span class="dir">srcs/</span>
+    ├── <span class="file">docker-compose.yml</span>
+    ├── <span class="file">docker-compose.bonus.yml</span>     <span class="comment"># bonus overlay — see below</span>
+    ├── <span class="file">.env</span>                         <span class="comment"># gitignored — not committed</span>
+    └── <span class="dir">requirements/</span>
+        ├── <span class="dir">mariadb/</span>
+        │   ├── <span class="file">Dockerfile</span>
+        │   ├── <span class="file">.dockerignore</span>
+        │   ├── <span class="dir">conf/50-server.cnf</span>
+        │   └── <span class="dir">tools/init_db.sh</span>
+        ├── <span class="dir">wordpress/</span>
+        │   ├── <span class="file">Dockerfile</span>
+        │   ├── <span class="file">.dockerignore</span>
+        │   ├── <span class="dir">conf/www.conf</span>
+        │   └── <span class="dir">tools/setup_wp.sh</span>
+        ├── <span class="dir">nginx/</span>
+        │   ├── <span class="file">Dockerfile</span>
+        │   ├── <span class="file">.dockerignore</span>
+        │   └── <span class="dir">conf/nginx.conf</span>
+        └── <span class="dir">bonus/</span>                    <span class="comment"># bonus part only</span>
+            ├── <span class="dir">redis/</span>
+            ├── <span class="dir">ftp/</span>
+            ├── <span class="dir">static-site/</span>
+            └── <span class="dir">adminer/</span>
+</div>
+</section>
+
+
+<section id="checklist">
+  <h2><i class="ti ti-checklist"></i>Compliance checklist</h2>
+  <p>Every rule from the subject, checked against the files in this guide. The compose file was run through a YAML parser and every script and Dockerfile was grepped for the forbidden patterns below before publishing this page.</p>
+
+  <h4>Build &amp; images</h4>
+  <ul class="checklist">
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">Each Docker image has the same name as its service — <code>image: mariadb</code>, <code>image: wordpress</code>, <code>image: nginx</code></span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">Each service runs in its own dedicated container</span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">Base image is the penultimate stable Debian — <code>debian:12-slim</code> ("bookworm", now oldstable). Current stable is Debian 13 "trixie"; re-verify at <a href="https://www.debian.org/releases/" target="_blank">debian.org/releases</a> at build time</span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">One handwritten Dockerfile per service, called from docker-compose.yml, called from the Makefile</span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">No pre-built images pulled other than the Debian base</span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">No <code>:latest</code> tag anywhere — grepped, none found</span></li>
+  </ul>
+
+  <h4>Services</h4>
+  <ul class="checklist">
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">NGINX with TLSv1.2 or TLSv1.3 only — verified in nginx.conf: <code>ssl_protocols TLSv1.2 TLSv1.3;</code></span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">WordPress + php-fpm installed and configured, no nginx in that container</span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">MariaDB alone, no nginx in that container</span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">Containers restart on crash — <code>restart: on-failure</code> on all three</span></li>
+  </ul>
+
+  <h4>Volumes</h4>
+  <ul class="checklist">
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">One volume for the WordPress database (<code>db_data</code>)</span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">One volume for the WordPress site files (<code>wp_data</code>)</span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">Both are Docker named volumes — no bind mounts under a service's <code>volumes:</code> key</span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">Both store data inside <code>/home/&lt;login&gt;/data</code> on the host, via <code>driver_opts</code></span></li>
+  </ul>
+
+  <h4>Network</h4>
+  <ul class="checklist">
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">A docker-network connects the containers — <code>inception</code>, driver <code>bridge</code></span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">No <code>network: host</code>, no <code>--link</code>, no <code>links:</code> — grepped, none present</span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">The network line is present in docker-compose.yml</span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">NGINX is the only container publishing a port, only 443</span></li>
+  </ul>
+
+  <h4>Process behaviour</h4>
+  <ul class="checklist">
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">No infinite-loop entrypoints — grepped every file for <code>tail -f</code>, bare <code>bash</code>, <code>sleep infinity</code>, <code>while true</code>: none found as actual commands, only in explanatory comments</span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">Every entrypoint ends with <code>exec</code> into the real daemon in the foreground, so that process becomes PID 1</span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">MariaDB's Dockerfile installs a <code>policy-rc.d</code> stub before <code>apt-get install</code> so the package's own postinst script can't start a second, unmanaged mysqld during the build</span></li>
+  </ul>
+
+  <h4>WordPress content</h4>
+  <ul class="checklist">
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">Two database users, one of them the administrator</span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">Admin username is checked at setup time and rejects any variant of admin/administrator</span><span class="rule-note">see the <code>case</code> guard in setup_wp.sh</span></li>
+  </ul>
+
+  <h4>Secrets &amp; config</h4>
+  <ul class="checklist">
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">No password present in any Dockerfile — grepped, none found</span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">Environment variables used for configuration</span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">A <code>.env</code> file stores the non-sensitive environment variables</span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">Docker secrets store confidential information — three secrets defined and mounted</span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text"><code>secrets/</code> and <code>.env</code> are gitignored — nothing sensitive committed</span></li>
+  </ul>
+
+  <h4>Documentation</h4>
+  <ul class="checklist">
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">README.md — italic first line in the exact required wording, Description, Instructions, Resources (with AI-usage note), and the four-way design comparison</span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">USER_DOC.md — covers all five required end-user points</span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">DEV_DOC.md — covers all four required developer points</span></li>
+    <li><i class="ti ti-circle-check"></i><span class="rule-text">Bonus services are documented in all three files — README explains what they are, USER_DOC covers how to use each one, DEV_DOC covers how to enable and manage them</span></li>
+  </ul>
+
+  <div class="callout callout-warn">
+    <i class="ti ti-alert-triangle"></i>
+    <div>
+      <p><strong>What this checklist can't verify for you:</strong> the current penultimate Debian version at the time you build, and — most importantly — whether the thing actually runs and you can explain every line of it during your evaluation. Every file in this guide uses <code>login</code> as a placeholder for your actual 42 login — replace it everywhere before building.</p>
+    </div>
+  </div>
+</section>
+
+
+<section id="dockerfile-instructions">
+  <h2><i class="ti ti-file-code"></i>Dockerfile instructions, one by one</h2>
+  <p>A Dockerfile is a sequence of instructions executed top to bottom. Each one produces a cached layer; layers stack into the final image. Official reference: <a href="https://docs.docker.com/reference/dockerfile/" target="_blank">docs.docker.com/reference/dockerfile <i class="ti ti-external-link" style="font-size:12px"></i></a></p>
+
+  <table>
+    <tr><th>Instruction</th><th>Purpose</th><th>Notes for this project</th></tr>
+    <tr><td><code>FROM</code></td><td>Base image, must be first</td><td>Always <code>debian:12-slim</code>, never <code>latest</code> — 12 ("bookworm") is the penultimate stable Debian release</td></tr>
+    <tr><td><code>RUN</code></td><td>Executes a command at build time, commits a layer</td><td>Chain installs and cleanup with <code>&amp;&amp;</code> in one <code>RUN</code> to keep the cache effective</td></tr>
+    <tr><td><code>COPY</code></td><td>Copies local files into the image</td><td>Used for config files and entrypoint scripts</td></tr>
+    <tr><td><code>ADD</code></td><td>Like COPY, plus URL fetch and tar auto-extract</td><td>Avoided — prefer explicit <code>RUN curl</code> so the layer stays visible in history</td></tr>
+    <tr><td><code>ENV</code></td><td>Sets a variable for build and runtime</td><td>Used for <code>DEBIAN_FRONTEND=noninteractive</code> so <code>apt-get install</code> never blocks on a prompt. Not for secrets — visible in <code>docker inspect</code></td></tr>
+    <tr><td><code>ARG</code></td><td>Build-time-only variable</td><td>Could parametrize the Debian tag via <code>--build-arg</code></td></tr>
+    <tr><td><code>WORKDIR</code></td><td>Sets the working directory for later instructions</td><td>Used in the WordPress Dockerfile: <code>/var/www/html</code></td></tr>
+    <tr><td><code>EXPOSE</code></td><td>Documents a listening port — does not publish it</td><td>Actual publishing only happens for nginx, in docker-compose.yml</td></tr>
+    <tr><td><code>VOLUME</code></td><td>Declares a mount point</td><td>Volumes are instead defined explicitly in compose, for host-path control</td></tr>
+    <tr><td><code>USER</code></td><td>Switches user for later instructions</td><td>php-fpm and vsftpd drop privileges to <code>www-data</code>/a created user internally instead</td></tr>
+    <tr><td><code>CMD</code></td><td>Default command, overridable at <code>docker run</code></td><td>Not used anywhere in this project — every container's main process is fixed via <code>ENTRYPOINT</code> instead, deliberately, so it can't be silently replaced</td></tr>
+    <tr><td><code>ENTRYPOINT</code></td><td>Fixed executable, not easily overridden</td><td>Used for every service. MariaDB/WordPress/FTP point at a setup script ending in <code>exec</code>; NGINX and Adminer, which need no setup step, use the exec-form array directly with no wrapper script at all</td></tr>
+    <tr><td><code>HEALTHCHECK</code></td><td>Periodic readiness probe</td><td>Optional — pairs with <code>depends_on: condition: service_healthy</code></td></tr>
+  </table>
+
+  <div class="callout callout-rule">
+    <i class="ti ti-flag-3"></i>
+    <div>
+      <p><strong>The rule that matters most here:</strong> always use the exec form — <code>["executable", "arg"]</code> — never the shell form. Shell form runs your process under <code>/bin/sh -c</code>, which becomes PID 1 instead of your actual daemon. A shell doesn't forward <code>SIGTERM</code> correctly, so <code>docker stop</code> hangs until Docker kills the container forcibly.</p>
+      <p>This is also exactly why <code>tail -f /dev/null</code>, bare <code>bash</code>, <code>sleep infinity</code>, and <code>while true; do sleep 1; done</code> are explicitly forbidden by the subject: none of them are your actual service, so the container never does real work and PID 1 never shuts down cleanly on <code>docker stop</code>.</p>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <i class="ti ti-info-circle"></i>
+    <div>
+      <p><strong>A Debian-specific wrinkle:</strong> package postinst scripts (notably <code>mariadb-server</code>) try to start their daemon via <code>invoke-rc.d</code> right after installation. There's no init system running during a Docker build, so this either fails loudly or silently starts an unmanaged process baked into a layer. The fix is a one-line <code>policy-rc.d</code> stub that denies the start request — see the MariaDB Dockerfile below.</p>
+    </div>
+  </div>
+
+  <h3>Multi-stage builds</h3>
+  <p>Not required here since Debian's <code>apt</code> packages cover everything needed, but worth knowing: multiple <code>FROM</code> instructions let you build in one stage and copy only the compiled result into a slim final stage.</p>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>example — multi-stage pattern</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('example_multistage_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="example_multistage_code" class="language-docker">FROM debian:12-slim AS builder
+RUN apt-get update &amp;&amp; apt-get install -y --no-install-recommends gcc libc6-dev \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+COPY src/ /src/
+RUN gcc -o /src/myapp /src/main.c
+
+FROM debian:12-slim
+COPY --from=builder /src/myapp /usr/local/bin/myapp
+CMD [&quot;myapp&quot;]</code></pre>
+</div>
+</section>
+
+
+<section id="compose-basics">
+  <h2><i class="ti ti-stack-2"></i>Compose fields, one by one</h2>
+  <p>Official reference: <a href="https://docs.docker.com/reference/compose-file/" target="_blank">docs.docker.com/reference/compose-file <i class="ti ti-external-link" style="font-size:12px"></i></a></p>
+
+  <table>
+    <tr><th>Field</th><th>Level</th><th>Purpose</th></tr>
+    <tr><td><code>build</code></td><td>service</td><td>Path/context to build the image from instead of pulling one</td></tr>
+    <tr><td><code>image</code></td><td>service</td><td>Names the built image — must equal the service name per the subject</td></tr>
+    <tr><td><code>container_name</code></td><td>service</td><td>Fixes the container's name instead of an auto-generated one</td></tr>
+    <tr><td><code>restart</code></td><td>service</td><td><code>on-failure</code> restarts only on a crash, satisfying the subject's requirement</td></tr>
+    <tr><td><code>env_file</code></td><td>service</td><td>Loads non-sensitive config from <code>.env</code></td></tr>
+    <tr><td><code>secrets</code></td><td>service / top-level</td><td>Mounts sensitive values at <code>/run/secrets/&lt;name&gt;</code>, never in env or image layers</td></tr>
+    <tr><td><code>volumes</code></td><td>service / top-level</td><td>Named volumes for persistent data — no bind mounts for db/wp data</td></tr>
+    <tr><td><code>networks</code></td><td>service / top-level</td><td>Attaches services to the custom bridge network</td></tr>
+    <tr><td><code>ports</code></td><td>service</td><td>Publishes to the host — only used on <code>nginx</code>, only <code>443:443</code></td></tr>
+    <tr><td><code>expose</code></td><td>service</td><td>Documents an internal-only port — used on mariadb (3306) and wordpress (9000)</td></tr>
+    <tr><td><code>depends_on</code></td><td>service</td><td>Controls start order only — not actual readiness, see the callout below</td></tr>
+  </table>
+
+  <div class="callout callout-warn">
+    <i class="ti ti-alert-triangle"></i>
+    <div>
+      <p><strong><code>depends_on</code> is not a readiness check.</strong> It only waits for the dependency's container to <em>start</em>, not for the service inside it to be ready to accept connections. That's why <code>setup_wp.sh</code> in this guide polls MariaDB's TCP port in a loop before running any <code>wp-cli</code> command — without it, WordPress setup would race the database and fail intermittently.</p>
+    </div>
+  </div>
+</section>
+
+
+<section id="mariadb">
+  <h2><i class="ti ti-database"></i>MariaDB <span class="chip">mandatory</span></h2>
+  <p>Debian-only, no bundled nginx, credentials pulled from Docker secrets, and a data directory that only gets initialised once — otherwise every restart would wipe the database sitting in the named volume.</p>
+
+  <h3>Dockerfile</h3>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>srcs/requirements/mariadb/Dockerfile</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('mariadb_dockerfile_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="mariadb_dockerfile_code" class="language-docker">FROM debian:12-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN printf &#x27;#!/bin/sh\nexit 101\n&#x27; &gt; /usr/sbin/policy-rc.d \
+    &amp;&amp; chmod +x /usr/sbin/policy-rc.d
+
+RUN apt-get update \
+    &amp;&amp; apt-get install -y --no-install-recommends \
+        mariadb-server \
+        mariadb-client \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /run/mysqld &amp;&amp; chown mysql:mysql /run/mysqld
+
+COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
+
+COPY tools/init_db.sh /usr/local/bin/init_db.sh
+RUN chmod +x /usr/local/bin/init_db.sh
+
+EXPOSE 3306
+
+ENTRYPOINT [&quot;/usr/local/bin/init_db.sh&quot;]
+</code></pre>
+</div>
+
+  <h3>Entrypoint script</h3>
+  <p>Runs as PID 1. First run: initialises the data directory with <code>mariadb-install-db</code>, boots a temporary local-only instance to create the database and users from secrets, shuts it down, then <code>exec</code>s the real <code>mysqld</code> (the compatibility symlink Debian's package ships for the canonical <code>mariadbd</code> binary). Subsequent runs: the volume already has data, so initialisation is skipped entirely.</p>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>srcs/requirements/mariadb/tools/init_db.sh</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('mariadb_init_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="mariadb_init_code" class="language-bash">#!/bin/sh
+set -e
+
+DB_DATA_DIR=&quot;/var/lib/mysql&quot;
+
+DB_ROOT_PASSWORD=$(cat /run/secrets/db_root_password)
+DB_PASSWORD=$(cat /run/secrets/db_password)
+
+: &quot;${MYSQL_DATABASE:?MYSQL_DATABASE not set}&quot;
+: &quot;${MYSQL_USER:?MYSQL_USER not set}&quot;
+
+mkdir -p /run/mysqld
+chown mysql:mysql /run/mysqld
+
+if [ ! -d &quot;${DB_DATA_DIR}/mysql&quot; ]; then
+    echo &quot;initialising data directory&quot;
+    mariadb-install-db --user=mysql --datadir=&quot;${DB_DATA_DIR}&quot; &gt; /dev/null
+fi
+
+mysqld --user=mysql --datadir=&quot;${DB_DATA_DIR}&quot; --skip-networking &amp;
+TMP_PID=$!
+
+i=0
+until mysqladmin --user=root --password=&quot;${DB_ROOT_PASSWORD}&quot; ping &gt;/dev/null 2&gt;&amp;1; do
+    i=$((i + 1))
+    if [ &quot;$i&quot; -ge 30 ]; then
+        echo &quot;bootstrap mysqld did not come up&quot;
+        exit 1
+    fi
+    sleep 1
+done
+
+mysql --user=root --password=&quot;${DB_ROOT_PASSWORD}&quot; &lt;&lt;-EOSQL
+    CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;
+    CREATE USER IF NOT EXISTS &#x27;${MYSQL_USER}&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;${DB_PASSWORD}&#x27;;
+    ALTER USER &#x27;${MYSQL_USER}&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;${DB_PASSWORD}&#x27;;
+    GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO &#x27;${MYSQL_USER}&#x27;@&#x27;%&#x27;;
+    ALTER USER &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED BY &#x27;${DB_ROOT_PASSWORD}&#x27;;
+    FLUSH PRIVILEGES;
+EOSQL
+
+mysqladmin --user=root --password=&quot;${DB_ROOT_PASSWORD}&quot; shutdown
+wait &quot;${TMP_PID}&quot;
+
+exec mysqld --user=mysql --datadir=&quot;${DB_DATA_DIR}&quot; --bind-address=0.0.0.0
+</code></pre>
+</div>
+
+  <h3>Config</h3>
+  <p>Debian's packaged default binds MariaDB to <code>127.0.0.1</code> only — this file overrides that to <code>0.0.0.0</code> so the WordPress container can reach it across the Docker network.</p>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>srcs/requirements/mariadb/conf/50-server.cnf</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('mariadb_conf_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="mariadb_conf_code" class="language-ini">[mysqld]
+bind-address = 0.0.0.0
+datadir = /var/lib/mysql
+socket = /run/mysqld/mysqld.sock
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+skip-name-resolve
+</code></pre>
+</div>
+
+  <ul class="resource-list">
+    <li><i class="ti ti-book"></i><a href="https://mariadb.com/kb/en/documentation/" target="_blank">MariaDB Knowledge Base</a><span>official docs</span></li>
+    <li><i class="ti ti-book"></i><a href="https://mariadb.com/kb/en/mariadb-install-db/" target="_blank">mariadb-install-db reference</a><span>data dir init</span></li>
+    <li><i class="ti ti-book"></i><a href="https://wiki.debian.org/MariaDB" target="_blank">Debian wiki — MariaDB</a><span>packaging notes</span></li>
+  </ul>
+</section>
+
+
+<section id="wordpress">
+  <h2><i class="ti ti-brand-wordpress"></i>WordPress + php-fpm <span class="chip">mandatory</span></h2>
+  <p>Debian 12 "bookworm" ships PHP 8.2 in its default repositories, so every php-prefixed package and binary in this service is version-pinned to <code>8.2</code>. php-fpm listens on TCP 9000 so NGINX (a separate container) can reach it — the default pool config only listens on a unix socket, which is unreachable across containers, so it's overridden.</p>
+
+  <h3>Dockerfile</h3>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>srcs/requirements/wordpress/Dockerfile</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('wp_dockerfile_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="wp_dockerfile_code" class="language-docker">FROM debian:12-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    &amp;&amp; apt-get install -y --no-install-recommends \
+        php8.2-fpm \
+        php8.2-cli \
+        php8.2-mysql \
+        php8.2-curl \
+        php8.2-mbstring \
+        php8.2-xml \
+        php8.2-zip \
+        php8.2-gd \
+        php8.2-intl \
+        curl \
+        ca-certificates \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+
+RUN curl -o /usr/local/bin/wp -sSL \
+        https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+    &amp;&amp; chmod +x /usr/local/bin/wp
+
+RUN mkdir -p /run/php
+
+COPY conf/www.conf /etc/php/8.2/fpm/pool.d/www.conf
+
+WORKDIR /var/www/html
+
+COPY tools/setup_wp.sh /usr/local/bin/setup_wp.sh
+RUN chmod +x /usr/local/bin/setup_wp.sh
+
+EXPOSE 9000
+
+ENTRYPOINT [&quot;/usr/local/bin/setup_wp.sh&quot;]
+</code></pre>
+</div>
+
+  <div class="callout callout-warn">
+    <i class="ti ti-alert-triangle"></i>
+    <div><p><strong><code>ca-certificates</code> isn't optional here.</strong> With <code>--no-install-recommends</code>, Debian's <code>curl</code> package does not automatically pull in root certificates — the WP-CLI download over HTTPS would fail certificate verification without it. Alpine's <code>curl</code> package bundles this dependency by default, which is an easy thing to forget when porting a Dockerfile between distributions.</p></div>
+  </div>
+
+  <h3>php-fpm pool config</h3>
+  <p>The one line that matters: <code>listen = 0.0.0.0:9000</code> instead of a socket path. The pool runs as <code>www-data</code> — Debian's standard web server user, created automatically by the <code>php8.2-fpm</code> package.</p>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>srcs/requirements/wordpress/conf/www.conf</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('wp_conf_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="wp_conf_code" class="language-ini">[www]
+user = www-data
+group = www-data
+listen = 0.0.0.0:9000
+listen.owner = www-data
+listen.group = www-data
+pm = dynamic
+pm.max_children = 5
+pm.start_servers = 2
+pm.min_spare_servers = 1
+pm.max_spare_servers = 3
+clear_env = no
+catch_workers_output = yes
+</code></pre>
+</div>
+
+  <h3>Entrypoint script</h3>
+  <p>Polls MariaDB until it accepts TCP connections, then uses WP-CLI to download core, write <code>wp-config.php</code>, run the install, and create the required second (non-admin) user. The admin username is validated against the subject's naming restriction before anything is created.</p>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>srcs/requirements/wordpress/tools/setup_wp.sh</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('wp_setup_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="wp_setup_code" class="language-bash">#!/bin/sh
+set -e
+
+WP_PATH=&quot;/var/www/html&quot;
+
+: &quot;${DOMAIN_NAME:?DOMAIN_NAME not set}&quot;
+: &quot;${MYSQL_DATABASE:?MYSQL_DATABASE not set}&quot;
+: &quot;${MYSQL_USER:?MYSQL_USER not set}&quot;
+: &quot;${WP_TITLE:?WP_TITLE not set}&quot;
+
+DB_PASSWORD=$(cat /run/secrets/db_password)
+WP_ADMIN_USER=$(sed -n &#x27;1p&#x27; /run/secrets/credentials)
+WP_ADMIN_PASS=$(sed -n &#x27;2p&#x27; /run/secrets/credentials)
+WP_USER2=$(sed -n &#x27;3p&#x27; /run/secrets/credentials)
+WP_USER2_PASS=$(sed -n &#x27;4p&#x27; /run/secrets/credentials)
+
+case &quot;$(echo &quot;$WP_ADMIN_USER&quot; | tr &#x27;[:upper:]&#x27; &#x27;[:lower:]&#x27;)&quot; in
+    *admin*)
+        echo &quot;admin username cannot contain admin&quot;
+        exit 1
+        ;;
+esac
+
+echo &quot;waiting for database&quot;
+i=0
+until php8.2 -r &quot;exit(@fsockopen(&#x27;mariadb&#x27;, 3306) ? 0 : 1);&quot; 2&gt;/dev/null; do
+    i=$((i + 1))
+    if [ &quot;$i&quot; -ge 60 ]; then
+        echo &quot;database not reachable after 60s&quot;
+        exit 1
+    fi
+    sleep 1
+done
+echo &quot;database reachable&quot;
+
+mkdir -p /run/php
+
+cd &quot;${WP_PATH}&quot;
+
+if [ ! -f &quot;${WP_PATH}/wp-settings.php&quot; ]; then
+    echo &quot;downloading wordpress core&quot;
+    wp core download --allow-root
+fi
+
+if [ ! -f &quot;${WP_PATH}/wp-config.php&quot; ]; then
+    echo &quot;writing wp-config.php&quot;
+    wp config create \
+        --dbname=&quot;${MYSQL_DATABASE}&quot; \
+        --dbuser=&quot;${MYSQL_USER}&quot; \
+        --dbpass=&quot;${DB_PASSWORD}&quot; \
+        --dbhost=mariadb:3306 \
+        --allow-root
+fi
+
+if ! wp core is-installed --allow-root 2&gt;/dev/null; then
+    echo &quot;running install&quot;
+    wp core install \
+        --url=&quot;https://${DOMAIN_NAME}&quot; \
+        --title=&quot;${WP_TITLE}&quot; \
+        --admin_user=&quot;${WP_ADMIN_USER}&quot; \
+        --admin_password=&quot;${WP_ADMIN_PASS}&quot; \
+        --admin_email=&quot;admin@${DOMAIN_NAME}&quot; \
+        --allow-root
+
+    wp user create &quot;${WP_USER2}&quot; &quot;editor@${DOMAIN_NAME}&quot; \
+        --role=editor \
+        --user_pass=&quot;${WP_USER2_PASS}&quot; \
+        --allow-root
+    echo &quot;wordpress installed&quot;
+else
+    echo &quot;already installed&quot;
+fi
+
+chown -R www-data:www-data &quot;${WP_PATH}&quot;
+
+exec php-fpm8.2 -F -O
+</code></pre>
+</div>
+
+  <ul class="resource-list">
+    <li><i class="ti ti-book"></i><a href="https://wp-cli.org/" target="_blank">WP-CLI documentation</a><span>official docs</span></li>
+    <li><i class="ti ti-book"></i><a href="https://wp-cli.org/commands/core/install/" target="_blank">wp core install reference</a><span>command reference</span></li>
+    <li><i class="ti ti-book"></i><a href="https://www.php.net/manual/en/install.fpm.configuration.php" target="_blank">php-fpm pool configuration</a><span>php.net</span></li>
+    <li><i class="ti ti-book"></i><a href="https://wiki.debian.org/PHP" target="_blank">Debian wiki — PHP</a><span>versioned package layout</span></li>
+  </ul>
+</section>
+
+
+<section id="nginx">
+  <h2><i class="ti ti-shield-lock"></i>NGINX + TLS <span class="chip">mandatory</span></h2>
+  <p>The only container publishing a port. Terminates TLS 1.2/1.3 with a self-signed certificate generated at build time, then proxies PHP requests to <code>wordpress:9000</code> over the Docker network.</p>
+
+  <h3>Dockerfile</h3>
+  <p>Uses <code>ENTRYPOINT</code>, not <code>CMD</code>, for the final line — unlike <code>CMD</code>, which anything passed after the image name at <code>docker run</code> time silently replaces, <code>ENTRYPOINT</code> can't be casually overridden. For a container whose entire job is "run nginx," that's a real, low-cost hardening: the container's one purpose stays fixed.</p>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>srcs/requirements/nginx/Dockerfile</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('nginx_dockerfile_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="nginx_dockerfile_code" class="language-docker">FROM debian:12-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    &amp;&amp; apt-get install -y --no-install-recommends nginx openssl \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /etc/nginx/ssl \
+    &amp;&amp; openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+        -keyout /etc/nginx/ssl/inception.key \
+        -out /etc/nginx/ssl/inception.crt \
+        -subj &quot;/C=PT/ST=Porto/L=Porto/O=42/CN=login.42.fr&quot;
+
+COPY conf/nginx.conf /etc/nginx/nginx.conf
+
+EXPOSE 443
+
+ENTRYPOINT [&quot;nginx&quot;, &quot;-g&quot;, &quot;daemon off;&quot;]
+</code></pre>
+</div>
+
+  <div class="callout callout-info">
+    <i class="ti ti-info-circle"></i>
+    <div><p>Note what's <em>not</em> here: unlike MariaDB and WordPress, there's no wrapper script ending in <code>exec</code>. That handoff pattern exists specifically because those two containers run setup logic — waiting for readiness, creating a database, downloading WordPress — before the real daemon can take over, so the script needs to replace itself with the daemon once setup finishes. NGINX has no such setup step: the exec-form array syntax already calls <code>execve()</code> directly on the nginx binary with no intermediate shell, so nginx is PID 1 immediately. There's no wrapper to hand off from, and nothing about this could move into <code>nginx.conf</code> either — a config file is data the already-running nginx binary reads, not a script that gets executed in its own right.</p></div>
+  </div>
+
+  <h3>nginx.conf</h3>
+  <p>Runs as <code>www-data</code> — Debian's conventional web server user, kept explicit here since the whole config file is overwritten by the <code>COPY</code> in the Dockerfile.</p>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>srcs/requirements/nginx/conf/nginx.conf</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('nginx_conf_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="nginx_conf_code" class="language-nginx">user www-data;
+worker_processes auto;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    include mime.types;
+    default_type application/octet-stream;
+    include conf.d/*.conf;
+    access_log /dev/stdout;
+    error_log /dev/stderr;
+
+    server {
+        listen 443 ssl;
+        server_name login.42.fr;
+
+        ssl_certificate /etc/nginx/ssl/inception.crt;
+        ssl_certificate_key /etc/nginx/ssl/inception.key;
+        ssl_protocols TLSv1.2 TLSv1.3;
+        ssl_ciphers HIGH:!aNULL:!MD5;
+
+        root /var/www/html;
+        index index.php index.html;
+
+        location / {
+            try_files $uri $uri/ /index.php?$args;
+        }
+
+        location ~ \.php$ {
+            fastcgi_pass wordpress:9000;
+            fastcgi_index index.php;
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            include fastcgi_params;
+        }
+
+        location ~ /\.ht {
+            deny all;
+        }
+    }
+}
+</code></pre>
+</div>
+
+  <div class="callout callout-rule">
+    <i class="ti ti-flag-3"></i>
+    <div><p>The subject requires <strong>TLSv1.2 or TLSv1.3 only</strong> — the <code>ssl_protocols</code> line lists exactly those two and nothing older. A self-signed cert is fine for this project; your browser will warn about it once, which is expected.</p></div>
+  </div>
+
+  <div class="callout callout-warn">
+    <i class="ti ti-alert-triangle"></i>
+    <div><p><strong><code>access_log</code>/<code>error_log</code> are set explicitly to <code>/dev/stdout</code>/<code>/dev/stderr</code>.</strong> Without these two lines, Debian's packaged nginx defaults both to real files under <code>/var/log/nginx/</code> — confirmed directly by running it: a genuine request and its matching error both landed in the files while <code>docker logs</code> stayed completely empty. The official nginx Docker image papers over this with symlinks baked into its own build; building nginx from a bare Debian base means adding these two directives yourself.</p></div>
+  </div>
+
+  <ul class="resource-list">
+    <li><i class="ti ti-book"></i><a href="https://nginx.org/en/docs/http/ngx_http_ssl_module.html" target="_blank">NGINX ssl module docs</a><span>official docs</span></li>
+    <li><i class="ti ti-book"></i><a href="https://nginx.org/en/docs/http/ngx_http_fastcgi_module.html" target="_blank">NGINX fastcgi module docs</a><span>official docs</span></li>
+  </ul>
+</section>
+
+
+<section id="compose-file">
+  <h2><i class="ti ti-file-type-yml"></i>docker-compose.yml <span class="chip">mandatory</span></h2>
+  <p>Ties the three services together: builds each from its own Dockerfile, connects them on the <code>inception</code> network, mounts the two named volumes at fixed host paths, and publishes only port 443 on <code>nginx</code>.</p>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>srcs/docker-compose.yml</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('compose_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="compose_code" class="language-yaml">services:
+
+  mariadb:
+    build:
+      context: ./requirements/mariadb
+    image: mariadb
+    container_name: mariadb
+    restart: on-failure
+    env_file: .env
+    secrets:
+      - db_password
+      - db_root_password
+    volumes:
+      - db_data:/var/lib/mysql
+    expose:
+      - &quot;3306&quot;
+    networks:
+      - inception
+
+  wordpress:
+    build:
+      context: ./requirements/wordpress
+    image: wordpress
+    container_name: wordpress
+    restart: on-failure
+    env_file: .env
+    secrets:
+      - db_password
+      - credentials
+    volumes:
+      - wp_data:/var/www/html
+    expose:
+      - &quot;9000&quot;
+    networks:
+      - inception
+    depends_on:
+      - mariadb
+
+  nginx:
+    build:
+      context: ./requirements/nginx
+    image: nginx
+    container_name: nginx
+    restart: on-failure
+    ports:
+      - &quot;443:443&quot;
+    volumes:
+      - wp_data:/var/www/html
+    networks:
+      - inception
+    depends_on:
+      - wordpress
+
+networks:
+  inception:
+    driver: bridge
+
+volumes:
+  db_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/login/data/db
+  wp_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/login/data/wordpress
+
+secrets:
+  db_password:
+    file: ../secrets/db_password.txt
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+  credentials:
+    file: ../secrets/credentials.txt
+</code></pre>
+</div>
+  <div class="callout callout-info">
+    <i class="ti ti-info-circle"></i>
+    <div><p>Every file in this guide uses <code>login</code> as a placeholder for your actual 42 login, including the <code>device:</code> paths below and the domain name — replace it everywhere before building, since those host directories are created by the Makefile's <code>setup</code> target.</p></div>
+  </div>
+</section>
+
+
+<section id="env-secrets">
+  <h2><i class="ti ti-key"></i>.env and secrets</h2>
+  <p>Non-sensitive configuration goes in <code>.env</code>, loaded via <code>env_file:</code>. Anything confidential — passwords — goes in <code>secrets/*.txt</code>, referenced via the top-level <code>secrets:</code> block and mounted read-only at <code>/run/secrets/&lt;name&gt;</code> inside each container. Neither is committed to git.</p>
+
+  <h3>srcs/.env</h3>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>srcs/.env</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('env_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="env_code" class="language-bash">DOMAIN_NAME=login.42.fr
+MYSQL_DATABASE=wordpress
+MYSQL_USER=wpuser
+WP_TITLE=Inception
+</code></pre>
+</div>
+
+  <h3>.gitignore</h3>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>.gitignore</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('gitignore_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="gitignore_code" class="language-bash">secrets/
+srcs/.env
+data/
+</code></pre>
+</div>
+
+  <div class="callout callout-rule">
+    <i class="ti ti-flag-3"></i>
+    <div>
+      <p><strong>Why secrets and not just more environment variables?</strong> Environment variables set via <code>ENV</code> or <code>environment:</code> are visible in plaintext to anyone who runs <code>docker inspect</code> on the container, and can leak into image layers or logs. Docker secrets are mounted as files only inside the container's filesystem, are never baked into an image layer, and don't show up in <code>docker inspect</code> output — which is exactly why the subject calls them out as strongly recommended for confidential information.</p>
+    </div>
+  </div>
+</section>
+
+
+<section id="makefile">
+  <h2><i class="ti ti-terminal-2"></i>Makefile</h2>
+  <p>Creates the host data directories the named volumes are pinned to, then delegates everything else to <code>docker compose</code>. Kept intentionally thin — the actual orchestration logic lives in docker-compose.yml, exactly as the subject requires.</p>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>Makefile</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('makefile_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="makefile_code" class="language-makefile">LOGIN := login
+DATA_DIR := /home/$(LOGIN)/data
+COMPOSE_DIR := srcs
+PROJECT := inception
+COMPOSE := docker compose -p $(PROJECT) -f $(COMPOSE_DIR)/docker-compose.yml
+COMPOSE_ALL := $(COMPOSE) -f $(COMPOSE_DIR)/docker-compose.bonus.yml
+
+all: setup up
+
+setup:
+	mkdir -p $(DATA_DIR)/db
+	mkdir -p $(DATA_DIR)/wordpress
+
+up:
+	$(COMPOSE) up --build -d
+
+bonus:
+	$(COMPOSE_ALL) up --build -d
+
+down:
+	$(COMPOSE_ALL) down
+
+logs:
+	$(COMPOSE_ALL) logs -f
+
+ps:
+	$(COMPOSE_ALL) ps
+
+clean: down
+	docker image rm -f nginx wordpress mariadb redis ftp static-site adminer monilite 2&gt;/dev/null || true
+
+fclean: clean
+	$(COMPOSE_ALL) down -v
+	rm -rf $(DATA_DIR)/db/*
+	rm -rf $(DATA_DIR)/wordpress/*
+
+re: fclean all
+
+.PHONY: all setup up bonus down logs ps clean fclean re
+</code></pre>
+</div>
+
+  <table>
+    <tr><th>Target</th><th>Effect</th></tr>
+    <tr><td><code>make</code> / <code>make all</code></td><td>Creates data directories, builds and starts the mandatory stack only</td></tr>
+    <tr><td><code>make bonus</code></td><td>Layers <code>docker-compose.bonus.yml</code> on top and starts bonus services too — see the <a href="#bonus">bonus section</a></td></tr>
+    <tr><td><code>make down</code></td><td>Stops <em>all</em> containers, mandatory and bonus alike, keeps volumes and data</td></tr>
+    <tr><td><code>make logs</code> / <code>make ps</code></td><td>Also cover both mandatory and bonus, whichever are actually running</td></tr>
+    <tr><td><code>make clean</code></td><td>Removes all containers and built images (mandatory + bonus), keeps data</td></tr>
+    <tr><td><code>make fclean</code></td><td>Full reset — also deletes named volumes and host data</td></tr>
+    <tr><td><code>make re</code></td><td><code>fclean</code> then <code>all</code> — brings mandatory back up; run <code>make bonus</code> again afterward if you want bonus back too</td></tr>
+  </table>
+
+  <div class="callout callout-rule">
+    <i class="ti ti-flag-3"></i>
+    <div><p><strong>Why <code>down</code>/<code>clean</code>/<code>fclean</code> reference both compose files, not just the mandatory one.</strong> Compose can only see and manage containers for services defined in whatever file(s) you actually pass it — <code>bonus</code> explicitly adds <code>-f docker-compose.bonus.yml</code> when bringing things up, but if the teardown targets only ever referenced the mandatory file, they'd be structurally blind to redis/ftp/static-site/adminer/monilite, regardless of sharing the same project name. Referencing both files unconditionally is safe even when bonus was never started — Compose simply finds nothing to do for services that don't have running containers.</p></div>
+  </div>
+
+  <div class="callout callout-info">
+    <i class="ti ti-info-circle"></i>
+    <div><p>The <code>LOGIN</code> variable at the top of the Makefile is set to the placeholder <code>login</code> — change it to your own 42 login, matching whatever's in <code>docker-compose.yml</code>'s <code>device:</code> paths.</p></div>
+  </div>
+
+  <div class="callout callout-warn">
+    <i class="ti ti-alert-triangle"></i>
+    <div>
+      <p><strong>Why <code>-p inception</code> is pinned explicitly.</strong> Docker Compose derives its default project name from the working directory the command is run in — since <code>make</code> runs from the repo root, not from <code>srcs/</code>, that name depends entirely on whatever the student happens to call their cloned folder. A <code>fclean</code> target that guesses volume names like <code>srcs_db_data</code> will silently fail to remove them (the real name might be <code>my-inception-repo_db_data</code> instead), leaving stale volumes behind. Pinning <code>-p inception</code> makes the project name — and therefore every container and volume name — deterministic, and lets <code>docker compose down -v</code> resolve the real volume names itself instead of the Makefile guessing.</p>
+    </div>
+  </div>
+</section>
+
+
+<section id="bonus">
+  <h2><i class="ti ti-sparkles"></i>Bonus part <span class="badge badge-bonus">optional</span></h2>
+  <div class="callout callout-warn">
+    <i class="ti ti-alert-triangle"></i>
+    <div><p><strong>Only assessed if the mandatory part is perfect.</strong> The subject is explicit: if you have not passed every mandatory requirement, the bonus part is not evaluated at all — don't spend time here until the mandatory stack runs cleanly.</p></div>
+  </div>
+  <p>Each bonus service gets its own Debian-based Dockerfile and, where it needs one, its own volume — same rules as the mandatory part apply (own Dockerfile, no <code>latest</code>, no hacky entrypoints). Bonus lives in its own Compose file, layered on top of the mandatory one via Docker Compose's built-in multi-file merge — no manual copy-pasting into <code>docker-compose.yml</code> required.</p>
+
+  <div class="card-grid">
+    <div class="card"><i class="ti ti-bolt"></i><h4>Redis cache</h4><p>Object cache for WordPress</p></div>
+    <div class="card"><i class="ti ti-upload"></i><h4>FTP server</h4><p>Shares the wp_data volume</p></div>
+    <div class="card"><i class="ti ti-browser"></i><h4>Static site</h4><p>Any language except PHP, published on :8080</p></div>
+    <div class="card"><i class="ti ti-tool"></i><h4>Adminer</h4><p>Web UI for the database, published on :8081</p></div>
+    <div class="card"><i class="ti ti-activity"></i><h4>MONILite</h4><p>Host monitoring, reverse-proxied through NGINX on :8443</p></div>
+  </div>
+
+  <h3>docker-compose.bonus.yml</h3>
+  <p>A fully valid, standalone Compose file. Most services are new; the <code>nginx</code> entry is different — it's the <em>same</em> service already fully defined in the mandatory file, extended with one new port and one new volume mount for MONILite. Compose appends list-type fields like <code>ports</code> and <code>volumes</code> across <code>-f</code> files by target rather than replacing them, so this can't accidentally drop the mandatory <code>443:443</code> mapping or the <code>wp_data</code> mount — confirmed against <a href="https://docs.docker.com/reference/compose-file/merge/" target="_blank">Docker's own compose-file merge docs</a>, not assumed.</p>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>srcs/docker-compose.bonus.yml</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('bonus_compose_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="bonus_compose_code" class="language-yaml">services:
+
+  redis:
+    build:
+      context: ./requirements/bonus/redis
+    image: redis
+    container_name: redis
+    restart: on-failure
+    expose:
+      - &quot;6379&quot;
+    networks:
+      - inception
+
+  ftp:
+    build:
+      context: ./requirements/bonus/ftp
+    image: ftp
+    container_name: ftp
+    restart: on-failure
+    env_file: .env
+    secrets:
+      - ftp_credentials
+    volumes:
+      - wp_data:/var/www/html
+    ports:
+      - &quot;21:21&quot;
+      - &quot;21100-21110:21100-21110&quot;
+    networks:
+      - inception
+
+  static-site:
+    build:
+      context: ./requirements/bonus/static-site
+    image: static-site
+    container_name: static-site
+    restart: on-failure
+    ports:
+      - &quot;8080:8080&quot;
+    networks:
+      - inception
+
+  adminer:
+    build:
+      context: ./requirements/bonus/adminer
+    image: adminer
+    container_name: adminer
+    restart: on-failure
+    ports:
+      - &quot;8081:8081&quot;
+    networks:
+      - inception
+    depends_on:
+      - mariadb
+
+  monilite:
+    build:
+      context: ./requirements/bonus/monilite
+    image: monilite
+    container_name: monilite
+    restart: on-failure
+    expose:
+      - &quot;8000&quot;
+    networks:
+      - inception
+
+  nginx:
+    volumes:
+      - ./requirements/bonus/monilite/monilite.conf:/etc/nginx/conf.d/monilite.conf:ro
+    ports:
+      - &quot;8443:8443&quot;
+
+secrets:
+  ftp_credentials:
+    file: ../secrets/ftp_credentials.txt
+</code></pre>
+</div>
+
+  <p>Bring bonus services up with:</p>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>terminal</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('bonus_up_cmd_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="bonus_up_cmd_code" class="language-bash">docker compose -p inception -f srcs/docker-compose.yml -f srcs/docker-compose.bonus.yml up --build -d</code></pre>
+</div>
+
+  <div class="callout callout-info">
+    <i class="ti ti-info-circle"></i>
+    <div><p><code>make bonus</code> runs this same command. The mandatory <code>make</code> target never touches bonus, since the subject only evaluates it once mandatory is confirmed perfect — start mandatory first, verify it, then run <code>make bonus</code> separately.</p></div>
+  </div>
+</section>
+
+
+<section id="bonus-redis">
+  <h3 style="font-size:20px; display:flex; align-items:center; gap:8px;"><i class="ti ti-bolt" style="color:#5b8def"></i>Redis cache</h3>
+  <p>Object caching for WordPress — reduces repeated database queries. Debian's <code>redis-server</code> package ships the same binary name as everywhere else; it runs in the foreground by default when <code>daemonize no</code> is set, so no extra entrypoint script is needed.</p>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>srcs/requirements/bonus/redis/Dockerfile</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('redis_dockerfile_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="redis_dockerfile_code" class="language-docker">FROM debian:12-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    &amp;&amp; apt-get install -y --no-install-recommends redis-server \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+
+COPY conf/redis.conf /etc/redis/redis.conf
+
+EXPOSE 6379
+
+ENTRYPOINT [&quot;redis-server&quot;, &quot;/etc/redis/redis.conf&quot;]
+</code></pre>
+</div>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>srcs/requirements/bonus/redis/conf/redis.conf</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('redis_conf_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="redis_conf_code" class="language-ini">bind 0.0.0.0
+port 6379
+protected-mode no
+daemonize no
+maxmemory 128mb
+maxmemory-policy allkeys-lru
+</code></pre>
+</div>
+  <p style="font-size:13.5px;">On the WordPress side, install a Redis object-cache plugin (e.g. <code>redis-cache</code>) via WP-CLI in <code>setup_wp.sh</code> and point it at host <code>redis</code>, port 6379.</p>
+</section>
+
+
+<section id="bonus-ftp">
+  <h3 style="font-size:20px; display:flex; align-items:center; gap:8px;"><i class="ti ti-upload" style="color:#5b8def"></i>FTP server</h3>
+  <p>Mounts the <strong>same</strong> <code>wp_data</code> named volume as WordPress and NGINX, so files uploaded over FTP appear on the live site immediately. Needs its own credentials secret and, unlike the mandatory services, publishes ports directly — the subject explicitly allows opening extra ports for bonus services. Debian's <code>adduser</code> is the interactive perl wrapper (not Alpine's busybox applet), so the entrypoint passes <code>--disabled-password --gecos ""</code> to keep it scriptable.</p>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>srcs/requirements/bonus/ftp/Dockerfile</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('ftp_dockerfile_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="ftp_dockerfile_code" class="language-docker">FROM debian:12-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    &amp;&amp; apt-get install -y --no-install-recommends vsftpd \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+
+COPY conf/vsftpd.conf /etc/vsftpd.conf
+COPY tools/init_ftp.sh /usr/local/bin/init_ftp.sh
+RUN chmod +x /usr/local/bin/init_ftp.sh
+
+EXPOSE 21 21100-21110
+
+ENTRYPOINT [&quot;/usr/local/bin/init_ftp.sh&quot;]
+</code></pre>
+</div>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>srcs/requirements/bonus/ftp/tools/init_ftp.sh</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('ftp_init_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="ftp_init_code" class="language-bash">#!/bin/sh
+set -e
+
+FTP_USER=$(sed -n &#x27;1p&#x27; /run/secrets/ftp_credentials)
+FTP_PASS=$(sed -n &#x27;2p&#x27; /run/secrets/ftp_credentials)
+
+touch /etc/vsftpd.user_list
+
+mkdir -p /var/run/vsftpd/empty
+chmod 0755 /var/run/vsftpd/empty
+chown root:root /var/run/vsftpd/empty
+
+if ! id &quot;${FTP_USER}&quot; &gt;/dev/null 2&gt;&amp;1; then
+    adduser --disabled-password --gecos &quot;&quot; --home /var/www/html &quot;${FTP_USER}&quot;
+    echo &quot;${FTP_USER}:${FTP_PASS}&quot; | chpasswd
+    echo &quot;${FTP_USER}&quot; &gt;&gt; /etc/vsftpd.user_list
+fi
+
+chown -R &quot;${FTP_USER}&quot;:&quot;${FTP_USER}&quot; /var/www/html
+
+exec /usr/sbin/vsftpd /etc/vsftpd.conf
+</code></pre>
+</div>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>srcs/requirements/bonus/ftp/conf/vsftpd.conf</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('ftp_conf_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="ftp_conf_code" class="language-ini">listen=YES
+listen_ipv6=NO
+anonymous_enable=NO
+local_enable=YES
+write_enable=YES
+chroot_local_user=YES
+allow_writeable_chroot=YES
+userlist_enable=YES
+userlist_file=/etc/vsftpd.user_list
+userlist_deny=NO
+pasv_enable=YES
+pasv_min_port=21100
+pasv_max_port=21110
+pasv_address=127.0.0.1
+seccomp_sandbox=NO
+background=NO
+</code></pre>
+</div>
+
+  <div class="callout callout-rule">
+    <i class="ti ti-flag-3"></i>
+    <div><p><strong><code>pasv_address=127.0.0.1</code> is not a default — it's the fix for a classic Docker+FTP problem.</strong> Without it, vsftpd reports whatever IP <code>getsockname()</code> returns for the control connection, which inside a container is the container's own bridge-network address (something like <code>172.18.0.x</code>) — never reachable from outside the container's network namespace. The control connection and login would work fine; any actual directory listing or file transfer, which needs a separate passive-mode data connection, would silently hang. Pointing it at <code>127.0.0.1</code> is the correct fix for testing from the VM itself, which is how this project is evaluated — it would need a real routable address to also serve genuinely external clients.</p></div>
+  </div>
+
+  <div class="callout callout-rule">
+    <i class="ti ti-flag-3"></i>
+    <div><p><strong><code>seccomp_sandbox=NO</code> — also not optional inside a container.</strong> vsftpd installs its own internal syscall sandbox per connection via <code>prctl(PR_SET_SECCOMP, ...)</code> as a hardening measure, on top of whatever the OS already restricts. Docker's own default seccomp profile, applied to the container as a whole, conflicts with vsftpd trying to layer a second, nested filter on top of it — the connection gets accepted, but vsftpd's own setup step fails before it can send the normal <code>220</code> greeting, replying with a bare <code>500</code> instead. Every actively-maintained Docker vsftpd image carries this exact same line for exactly this reason.</p></div>
+  </div>
+
+  <div class="callout callout-rule">
+    <i class="ti ti-flag-3"></i>
+    <div><p><strong>A third fix, same root cause as <code>/run/php</code> and <code>/run/mysqld</code>.</strong> vsftpd ships its own <code>tmpfiles.d</code> rule — <code>d /var/run/vsftpd/empty 0755 root root -</code> — that only runs when <code>systemd-tmpfiles</code> processes it at boot. Without that directory, every connection gets accepted and then immediately rejected with <code>500 OOPS: vsftpd: not found: directory given in 'secure_chroot_dir':/var/run/vsftpd/empty</code>, since that empty, root-owned jail is required for vsftpd's own privilege-separation step. Reproduced and confirmed directly: removing the directory reliably reproduces this exact error message, and creating it — with the exact permissions and ownership vsftpd's own <code>tmpfiles.d</code> file specifies — resolves it completely, all the way through to a successful login, upload, and directory listing.</p></div>
+  </div>
+
+  <h4>Connecting and testing it</h4>
+  <p>From the VM, with <code>make bonus</code> already running:</p>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>terminal</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('ftp_test_cmd_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="ftp_test_cmd_code" class="language-bash">echo &quot;hello from ftp&quot; &gt; test.txt
+curl -u login_ftp:Wp42Secure_FtpPass1 -T test.txt ftp://login.42.fr/
+curl -u login_ftp:Wp42Secure_FtpPass1 ftp://login.42.fr/</code></pre>
+</div>
+  <p style="font-size:13.5px;">A working round trip: the upload lands in the same <code>wp_data</code> volume WordPress and NGINX use, so a file placed at the root should be fetchable straight back over HTTPS at <code>https://login.42.fr/test.txt</code> — confirming the shared-volume design, not just that the FTP login works.</p>
+</section>
+
+
+<section id="bonus-static">
+  <h3 style="font-size:20px; display:flex; align-items:center; gap:8px;"><i class="ti ti-browser" style="color:#5b8def"></i>Static site</h3>
+  <p>Any language except PHP — this example uses a minimal Node.js static file server, small enough not to need a framework dependency. Published directly on host port 8080 rather than routed through NGINX, since the subject permits opening extra ports for bonus services. Only <code>nodejs</code> is installed, not <code>npm</code> — <code>server.js</code> uses nothing but Node's built-in <code>http</code>/<code>fs</code>/<code>path</code> modules, so there's nothing to install, and Debian/Ubuntu's <code>npm</code> package is worth avoiding anyway: it depends on close to thirty separate unbundled <code>node-*</code> system packages, and that dependency graph fails to resolve entirely on a stock apt setup — confirmed by reproducing the exact failure before shipping this fix.</p>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>srcs/requirements/bonus/static-site/Dockerfile</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('static_dockerfile_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="static_dockerfile_code" class="language-docker">FROM debian:12-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    &amp;&amp; apt-get install -y --no-install-recommends nodejs \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY public/ ./public/
+COPY server.js .
+
+EXPOSE 8080
+
+ENTRYPOINT [&quot;node&quot;, &quot;server.js&quot;]
+</code></pre>
+</div>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>srcs/requirements/bonus/static-site/server.js</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('static_server_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="static_server_code" class="language-javascript">const http = require(&#x27;http&#x27;);
+const fs = require(&#x27;fs&#x27;);
+const path = require(&#x27;path&#x27;);
+
+const PORT = 8080;
+const ROOT = path.join(__dirname, &#x27;public&#x27;);
+
+const MIME = {
+  &#x27;.html&#x27;: &#x27;text/html&#x27;,
+  &#x27;.css&#x27;: &#x27;text/css&#x27;,
+  &#x27;.js&#x27;: &#x27;application/javascript&#x27;,
+  &#x27;.png&#x27;: &#x27;image/png&#x27;,
+  &#x27;.jpg&#x27;: &#x27;image/jpeg&#x27;,
+  &#x27;.svg&#x27;: &#x27;image/svg+xml&#x27;,
+};
+
+http.createServer((req, res) =&gt; {
+  let filePath = path.join(ROOT, req.url === &#x27;/&#x27; ? &#x27;index.html&#x27; : req.url);
+  const ext = path.extname(filePath);
+
+  fs.readFile(filePath, (err, data) =&gt; {
+    if (err) {
+      res.writeHead(404, { &#x27;Content-Type&#x27;: &#x27;text/plain&#x27; });
+      res.end(&#x27;404 not found&#x27;);
+      return;
+    }
+    res.writeHead(200, { &#x27;Content-Type&#x27;: MIME[ext] || &#x27;application/octet-stream&#x27; });
+    res.end(data);
+  });
+}).listen(PORT, () =&gt; {
+  console.log(`listening on port ${PORT}`);
+});
+</code></pre>
+</div>
+</section>
+
+
+<section id="bonus-adminer">
+  <h3 style="font-size:20px; display:flex; align-items:center; gap:8px;"><i class="ti ti-tool" style="color:#5b8def"></i>Adminer</h3>
+  <p>A single-file PHP database admin tool. It only needs the PHP CLI's built-in development server, not a full php-fpm + web server pairing — Adminer is one file, not a production app, so this Dockerfile stays intentionally lighter than the WordPress one. Published on host port 8081, log in with server <code>mariadb</code> and the credentials from the mandatory secrets.</p>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>srcs/requirements/bonus/adminer/Dockerfile</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('adminer_dockerfile_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="adminer_dockerfile_code" class="language-docker">FROM debian:12-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    &amp;&amp; apt-get install -y --no-install-recommends \
+        php8.2-cli \
+        php8.2-mysql \
+        curl \
+        ca-certificates \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /var/www/adminer \
+    &amp;&amp; curl -o /var/www/adminer/index.php -sSL \
+        https://www.adminer.org/latest.php
+
+EXPOSE 8081
+
+ENTRYPOINT [&quot;php8.2&quot;, &quot;-S&quot;, &quot;0.0.0.0:8081&quot;, &quot;-t&quot;, &quot;/var/www/adminer&quot;]
+</code></pre>
+</div>
+  <ul class="resource-list">
+    <li><i class="ti ti-book"></i><a href="https://www.adminer.org/" target="_blank">Adminer official site</a><span>download source</span></li>
+  </ul>
+</section>
+
+
+<section id="bonus-monilite">
+  <h3 style="font-size:20px; display:flex; align-items:center; gap:8px;"><i class="ti ti-activity" style="color:#5b8def"></i>MONILite — the "service of your choice"</h3>
+  <p>A small, MIT-licensed Python system monitor (<a href="https://github.com/zhao4hua4/MONILite" target="_blank">github.com/zhao4hua4/MONILite <i class="ti ti-external-link" style="font-size:12px"></i></a>, installed straight from PyPI) reporting CPU, memory, and disk usage over an HTTP API and a bundled dashboard. Its own documentation specifically recommends running it behind an NGINX TLS reverse proxy — exactly the pattern already in place for WordPress — so rather than publish its port directly like the other bonus services, it stays internal-only and NGINX proxies to it on a second TLS port, reusing the same certificate already generated for the mandatory site.</p>
+
+  <h4>Dockerfile</h4>
+  <p>Installed into a venv rather than the system Python, sidestepping Debian 12's PEP 668 "externally managed environment" restriction entirely rather than working around it with <code>--break-system-packages</code>. <code>--no-gpu</code> skips NVML probing, which would find nothing useful inside a container anyway.</p>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>srcs/requirements/bonus/monilite/Dockerfile</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('monilite_dockerfile_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="monilite_dockerfile_code" class="language-docker">FROM debian:12-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    &amp;&amp; apt-get install -y --no-install-recommends python3 python3-venv \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+
+RUN python3 -m venv /opt/monilite-venv \
+    &amp;&amp; /opt/monilite-venv/bin/pip install --no-cache-dir monilite
+
+EXPOSE 8000
+
+ENTRYPOINT [&quot;/opt/monilite-venv/bin/monilite&quot;, &quot;serve&quot;, &quot;--host&quot;, &quot;0.0.0.0&quot;, &quot;--port&quot;, &quot;8000&quot;, &quot;--no-gpu&quot;]
+</code></pre>
+</div>
+
+  <h4>NGINX extension</h4>
+  <p>Mounted into the existing NGINX container at <code>/etc/nginx/conf.d/monilite.conf</code> — picked up by the <code>include conf.d/*.conf;</code> line in the mandatory <code>nginx.conf</code>, which is a no-op until bonus actually mounts something there.</p>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>srcs/requirements/bonus/monilite/monilite.conf</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('monilite_conf_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="monilite_conf_code" class="language-nginx">server {
+    listen 8443 ssl;
+    server_name login.42.fr;
+
+    ssl_certificate /etc/nginx/ssl/inception.crt;
+    ssl_certificate_key /etc/nginx/ssl/inception.key;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+
+    location / {
+        proxy_pass http://monilite:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+</code></pre>
+</div>
+
+  <div class="callout callout-warn">
+    <i class="ti ti-alert-triangle"></i>
+    <div>
+      <p><strong>Known, disclosed trade-off:</strong> MONILite has no authentication of its own, and runs on Flask's built-in development server rather than a production WSGI server. Both are reasonable for a personal learning VM behind TLS, not something to expose on a public-facing host without adding an auth layer at the NGINX level first — worth being able to say plainly at defense rather than getting caught not knowing it.</p>
+    </div>
+  </div>
+
+  <p style="font-size:13.5px;">Verified directly before shipping: installed cleanly from PyPI, started in the foreground with no self-daemonizing (correct for the exec-form <code>ENTRYPOINT</code>/PID 1 pattern used throughout this project), and served real metrics from <code>/api/v1/live</code> with <code>--no-gpu</code> degrading cleanly rather than erroring.</p>
+</section>
+
+
+<section id="readme">
+  <h2><i class="ti ti-markdown"></i>README.md <span class="chip">required</span></h2>
+  <p>Must open with an italicized line in the exact wording the subject specifies, then Description, Instructions, and Resources sections, plus a Project description section comparing four pairs of design choices — with a short note here on why Debian was chosen for the base image.</p>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>README.md</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('readme_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="readme_code" class="language-markdown">*This project has been created as part of the 42 curriculum by login.*
+
+# Inception
+
+## Description
+
+Inception sets up a small self-contained web infrastructure using Docker
+Compose: an NGINX reverse proxy terminating TLS, a WordPress site running
+on php-fpm, and a MariaDB database — each in its own container, built from
+scratch with a dedicated Dockerfile, connected over a private Docker
+network, and backed by two persistent named volumes.
+
+## Instructions
+
+1. Add `127.0.0.1 login.42.fr` to `/etc/hosts` on the VM.
+2. Run `make` from the repository root.
+3. Visit `https://login.42.fr` (accept the self-signed certificate warning).
+
+See `USER_DOC.md` for day-to-day usage and `DEV_DOC.md` for the full
+development/build workflow.
+
+## Resources
+
+- [Docker documentation](https://docs.docker.com/)
+- [Dockerfile reference](https://docs.docker.com/reference/dockerfile/)
+- [Compose file reference](https://docs.docker.com/reference/compose-file/)
+- [Debian release policy](https://www.debian.org/releases/)
+- [WP-CLI documentation](https://wp-cli.org/)
+- [NGINX documentation](https://nginx.org/en/docs/)
+
+AI assistance was used to explain Docker/Compose concepts (layers, PID 1
+behaviour, named volumes vs bind mounts) and to draft and debug the
+Dockerfiles and entrypoint scripts, which were then reviewed, tested, and
+adapted line by line before being committed.
+
+## Project description: design choices
+
+**Why Debian for the base image** — Debian was chosen over Alpine for
+package maturity and glibc compatibility: MariaDB, PHP, and WP-CLI all
+ship as well-tested `apt` packages with predictable version numbers.
+
+**Virtual Machines vs Docker** — a VM virtualises an entire OS on top of
+a hypervisor, which is heavy but fully isolated. A container shares the
+host kernel and only packages the application plus its userspace
+dependencies, which makes it far lighter and faster to start. This
+project uses one VM as the host, and Docker containers inside it for
+each service.
+
+**Secrets vs Environment Variables** — environment variables are visible
+in plaintext via `docker inspect` and can leak into image layers or
+logs. Docker secrets are mounted as files only inside the container&#x27;s
+filesystem and are never baked into an image layer. This project uses
+`.env` for non-sensitive configuration and Docker secrets for passwords.
+
+**Docker Network vs Host Network** — host networking removes network
+isolation entirely and every port is exposed. A custom bridge network
+keeps containers isolated from the host and lets them reach each other
+by service name through Docker&#x27;s embedded DNS. This project uses a
+single custom bridge network (`inception`) and never `network: host`.
+
+**Docker Volumes vs Bind Mounts** — a bind mount points directly at an
+arbitrary host path with no lifecycle management. A named volume is
+managed by Docker end-to-end and can still be pinned to a specific host
+path via `driver_opts`. This project uses two named volumes, `db_data`
+and `wp_data`, both pinned to `/home/login/data/`.
+
+## Bonus
+
+The bonus part adds five extra services on top of the mandatory stack,
+each with its own Dockerfile and, where relevant, its own volume:
+
+- **Redis** — an object cache for WordPress, reducing repeated database
+  queries.
+- **FTP** (vsftpd) — mounts the same `wp_data` volume as WordPress and
+  NGINX, so files uploaded over FTP appear on the live site immediately.
+- **Static site** — a small Node.js site (no PHP), served independently
+  of WordPress.
+- **Adminer** — a single-file web UI for browsing the MariaDB database
+  directly.
+- **MONILite** — the &quot;service of your choice&quot; slot. A small, MIT-licensed
+  Python system monitor ([github.com/zhao4hua4/MONILite](https://github.com/zhao4hua4/MONILite))
+  that reports CPU, memory, and disk usage for the host over an HTTP API
+  and a bundled dashboard.
+
+**Why MONILite:** its own documentation specifically recommends running
+it behind an NGINX TLS reverse proxy — exactly the pattern this project
+already uses for WordPress. Rather than publish its port directly like
+the other bonus services, NGINX reverse-proxies to it on a second port
+(8443), reusing the same TLS certificate already generated for the
+mandatory site. It&#x27;s also directly useful for this project specifically:
+a way to actually watch the VM&#x27;s resource usage while the stack runs,
+which is the kind of thing you&#x27;d otherwise have to SSH in and check
+manually.
+
+One caveat worth knowing for defense: MONILite has no authentication of
+its own (confirmed in its documented API surface), and it runs on
+Flask&#x27;s built-in development server rather than a production WSGI
+server — both reasonable trade-offs for a personal learning VM behind
+TLS, not something to expose on a public-facing host without adding an
+auth layer at the NGINX level first.
+
+Bonus services are not started by the default `make` target, since the
+subject only evaluates the bonus part once the mandatory part is
+confirmed perfect. Bring them up with `make bonus` — see `DEV_DOC.md`
+for exact commands and `USER_DOC.md` for how to access each one.
+</code></pre>
+</div>
+</section>
+
+
+<section id="userdoc-devdoc">
+  <h2><i class="ti ti-book-2"></i>USER_DOC.md &amp; DEV_DOC.md <span class="chip">required for validation</span></h2>
+  <p>Both must sit at the repository root in Markdown format — the subject added these as prerequisites for validation, separate from README.md.</p>
+
+  <h3>USER_DOC.md</h3>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>USER_DOC.md</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('userdoc_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="userdoc_code" class="language-markdown"># User documentation
+
+## What services does this stack provide?
+
+| Service | What it does |
+|---|---|
+| NGINX | Serves the website over HTTPS, the only door into the stack |
+| WordPress | The site itself — pages, posts, admin panel |
+| MariaDB | Stores all WordPress content (posts, users, settings) |
+
+## Starting and stopping the project
+
+```
+make        # builds everything and starts the stack in the background
+make down   # stops and removes the containers (data is kept)
+make re     # full reset: wipes containers, images, and stored data
+```
+
+## Accessing the website and the admin panel
+
+- Website: `https://login.42.fr`
+- Admin panel: `https://login.42.fr/wp-admin`
+
+Your browser will warn about the certificate because it&#x27;s self-signed —
+this is expected, accept the warning to continue.
+
+## Locating and managing credentials
+
+Credentials live in `secrets/` at the repository root, never in Git:
+
+- `secrets/credentials.txt` — WordPress admin and second user, one per line
+- `secrets/db_password.txt` — WordPress database user password
+- `secrets/db_root_password.txt` — MariaDB root password
+
+## Checking that services are running correctly
+
+```
+make ps
+make logs
+docker logs nginx
+docker logs wordpress
+docker logs mariadb
+```
+
+All three should show `Up` in `make ps`.
+
+## Bonus services
+
+Bonus services only start once you run `make bonus` — they&#x27;re separate
+from the mandatory `make`, since the subject only assesses bonus after
+mandatory is confirmed perfect. Once running:
+
+- **Redis** — works automatically in the background once WordPress&#x27;s
+  object-cache plugin points at it; no direct interaction needed.
+- **FTP** — connect from the VM itself (passive mode is pinned to
+  `127.0.0.1`, so this only works locally):
+  ```
+  curl -u login_ftp:Wp42Secure_FtpPass1 ftp://login.42.fr/
+  ```
+  To upload and confirm it lands in the live site&#x27;s files:
+  ```
+  echo &quot;hello from ftp&quot; &gt; test.txt
+  curl -u login_ftp:Wp42Secure_FtpPass1 -T test.txt ftp://login.42.fr/
+  curl -k https://login.42.fr/test.txt
+  ```
+  Credentials are in `secrets/ftp_credentials.txt`. The passive port
+  range is 21100–21110 if your client asks.
+- **Static site** — visit `http://&lt;VM IP&gt;:8080` directly. It runs
+  outside NGINX/TLS in this setup, so it&#x27;s plain HTTP.
+- **Adminer** — visit `http://&lt;VM IP&gt;:8081`, log in with server
+  `mariadb` and the database credentials from `secrets/db_password.txt`
+  and `srcs/.env`.
+- **MONILite** — visit `https://login.42.fr:8443` (same self-signed
+  certificate warning as the main site). Shows live CPU, memory, and
+  disk usage with history charts. No login — anyone who can reach that
+  port can view it.
+
+Check bonus containers the same way as the mandatory ones:
+
+```
+docker compose -p inception -f srcs/docker-compose.yml -f srcs/docker-compose.bonus.yml ps
+```
+</code></pre>
+</div>
+
+  <h3>DEV_DOC.md</h3>
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-filename"><i class="ti ti-file-code"></i>DEV_DOC.md</div>
+    <div class="code-actions">
+      <button class="copy-btn" onclick="copyCode('devdoc_code', this)"><i class="ti ti-copy"></i>Copy</button>
+    </div>
+  </div>
+  <pre><code id="devdoc_code" class="language-markdown"># Developer documentation
+
+## Setting up the environment from scratch
+
+Prerequisites: a VM running Debian, Docker Engine, and the Docker
+Compose plugin.
+
+1. Clone the repository.
+2. `secrets/` and `srcs/.env` already contain working values for local
+   testing — replace them with your own before any real submission.
+3. Add `127.0.0.1 login.42.fr` to `/etc/hosts` on the VM.
+
+## Building and launching with the Makefile / Compose
+
+```
+make setup
+make up
+```
+
+`make` (the default target) runs both in sequence.
+
+## Managing containers and volumes
+
+The Makefile pins the Compose project name to `inception`, so use the
+same flag when running Compose commands directly:
+
+```
+docker compose -p inception -f srcs/docker-compose.yml ps
+docker compose -p inception -f srcs/docker-compose.yml logs -f &lt;service&gt;
+docker compose -p inception -f srcs/docker-compose.yml exec mariadb sh
+docker volume inspect inception_db_data
+```
+
+To rebuild a single service after editing its Dockerfile:
+
+```
+docker compose -p inception -f srcs/docker-compose.yml up --build -d &lt;service&gt;
+```
+
+## Where data is stored and how it persists
+
+The two named volumes (`db_data`, `wp_data`) use `driver_opts` pointing
+at `/home/login/data/db` and `/home/login/data/wordpress` on the
+host. `docker compose down` (without `-v`) leaves them untouched. Only
+`make fclean` removes them, along with the host directories&#x27; contents —
+use it whenever you need a guaranteed clean re-bootstrap, for example
+after changing database credentials or entrypoint scripts.
+
+## Enabling the bonus part
+
+Bonus services live in `srcs/docker-compose.bonus.yml`, a separate,
+independently valid Compose file layered on top of the mandatory one —
+they are not started by the default `make` target, since the subject
+only evaluates bonus once the mandatory part is confirmed perfect.
+
+Once mandatory is verified working:
+
+```
+make bonus
+```
+
+which runs:
+
+```
+docker compose -p inception -f srcs/docker-compose.yml -f srcs/docker-compose.bonus.yml up --build -d
+```
+
+Compose merges both files into one configuration by name: the bonus
+file adds new services and the `ftp_credentials` secret, reusing the
+`inception` network and `wp_data` volume already declared in the main
+file. `secrets/ftp_credentials.txt` must exist for the `ftp` service to
+build — it ships with a working value for local testing, same as the
+mandatory secrets.
+
+The bonus file also extends the existing `nginx` service rather than
+adding a new one: it appends a second published port (`8443`) and
+mounts `monilite.conf` into `/etc/nginx/conf.d/`, which the mandatory
+`nginx.conf` already includes via `include conf.d/*.conf;` — a line
+that&#x27;s a no-op when that directory is empty (the default, mandatory-only
+case) and picks up the extra server block only once bonus mounts a file
+there. Compose appends `ports`/`volumes` entries across files by target
+rather than replacing them (confirmed against Docker&#x27;s own compose-file
+merge documentation), so the mandatory `443:443` mapping and `wp_data`
+mount on `nginx` are untouched by enabling bonus.
+
+To manage or tear down bonus containers specifically, pass both `-f`
+flags to any Compose command, since `down`/`logs`/`ps` need to know
+about both files to see the bonus services:
+
+```
+docker compose -p inception -f srcs/docker-compose.yml -f srcs/docker-compose.bonus.yml down
+docker compose -p inception -f srcs/docker-compose.yml -f srcs/docker-compose.bonus.yml logs -f ftp
+```
+</code></pre>
+</div>
+</section>
+
+
+<section id="pitfalls">
+  <h2><i class="ti ti-alert-triangle"></i>Common pitfalls</h2>
+
+  <div class="step">
+    <span class="step-num">1</span>
+    <div class="step-content">
+      <p><strong>Wrapping the main process in a shell or a loop.</strong> Breaks PID 1 signal handling and is explicitly forbidden. Always exec form, always the real daemon in the foreground.</p>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-num">2</span>
+    <div class="step-content">
+      <p><strong>Letting a Debian package's postinst script start its own daemon during the build.</strong> <code>mariadb-server</code> tries to start mysqld via <code>invoke-rc.d</code> right after <code>apt-get install</code>. Without the <code>policy-rc.d</code> stub shown in the MariaDB Dockerfile, this either fails the build or leaves a stray process baked into a layer.</p>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-num">3</span>
+    <div class="step-content">
+      <p><strong>Re-initialising the database on every restart.</strong> If the entrypoint always runs <code>mariadb-install-db</code>, restarting the container wipes the volume's content. Guard it with a check for existing data first.</p>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-num">4</span>
+    <div class="step-content">
+      <p><strong>Trusting <code>depends_on</code> for readiness.</strong> It only orders container starts. WordPress will fail intermittently against a MariaDB container that has started but hasn't finished initialising — poll for the port instead.</p>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-num">5</span>
+    <div class="step-content">
+      <p><strong>Forgetting <code>ca-certificates</code> on Debian.</strong> With <code>--no-install-recommends</code>, <code>curl</code>'s HTTPS calls (downloading WP-CLI, Adminer) fail certificate verification unless <code>ca-certificates</code> is installed explicitly — Alpine's <code>curl</code> package pulls this in automatically, Debian's does not.</p>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-num">6</span>
+    <div class="step-content">
+      <p><strong>php-fpm's PID file directory not existing on Debian.</strong> Debian's <code>php8.2-fpm</code> package relies on <code>systemd-tmpfiles</code> to create <code>/run/php</code> at boot — nothing does that inside a container, so php-fpm's master process fails immediately with an "unable to create pid file" error, the container restarts in a loop, and NGINX serves a 502 because nothing is actually listening on port 9000. Symptom-wise this is easy to mistake for a networking problem; check <code>docker logs wordpress</code> first. Fix: <code>mkdir -p /run/php</code> in the Dockerfile (and again in the entrypoint as a safety net, in case the runtime clears <code>/run</code> between build and start).</p>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-num">7</span>
+    <div class="step-content">
+      <p><strong>MariaDB's socket directory not existing, same root cause.</strong> Debian's <code>mariadb-server</code> package equally relies on <code>systemd-tmpfiles</code> to create <code>/run/mysqld</code> (owned by <code>mysql:mysql</code>) for its socket file — without it, <code>mysqld</code> refuses to start at all. Since WordPress's entrypoint polls MariaDB's TCP port before continuing, the visible symptom is WordPress's log getting stuck forever on "Waiting for database...", with the site returning 403 (nothing was ever written to the shared volume) rather than 502. Same fix, different path: <code>mkdir -p /run/mysqld && chown mysql:mysql /run/mysqld</code>, both in the Dockerfile and as a runtime safety net in the entrypoint before the bootstrap instance starts.</p>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-num">8</span>
+    <div class="step-content">
+      <p><strong>Using <code>#</code> for comments in a php-fpm pool file.</strong> Unlike <code>php.ini</code>, which accepts both <code>;</code> and <code>#</code>, php-fpm's pool-file parser only recognizes <code>;</code>. A <code>#</code> comment gets read as a real config entry — and if that comment happens to contain a literal <code>;</code> anywhere in its text, the parser reads up to that semicolon as an inline-comment boundary and finds a key with no value, failing with <code>value is NULL for a ZEND_INI_PARSER_ENTRY</code> at that exact line. php-fpm never starts, and NGINX 502s. Comments in <code>www.conf</code> must use <code>;</code> throughout.</p>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-num">9</span>
+    <div class="step-content">
+      <p><strong>Gating the whole install block on one file's existence.</strong> If the entrypoint only checks <code>[ ! -f wp-settings.php ]</code> to decide "already installed," a run that downloads WordPress core successfully but then hits a transient failure later (a DB connection error, a network blip) leaves that file present — so every future restart sees it and skips setup entirely, without ever completing <code>wp config create</code> or <code>wp core install</code>. The site stays permanently half-installed. Check each step independently, and use <code>wp core is-installed</code> as the real completion signal rather than any single file's presence.</p>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-num">10</span>
+    <div class="step-content">
+      <p><strong>The same weak-completion-signal bug, but on MariaDB's own entrypoint.</strong> Gating the entire user/database/grant setup behind <code>[ ! -d "$DATADIR/mysql" ]</code> looks safe — it stops <code>mariadb-install-db</code> from wiping existing data — but it also means that if the grant-creation step fails for <em>any</em> reason on the very first boot, every restart after that sees the directory already exists and skips user creation forever, on every clean VM, identically. The visible symptom is miles away from the cause: WordPress reports <code>Error: Database connection error (1130) Host 'x.x.x.x' is not allowed to connect</code> even though MariaDB is up and reachable — the account genuinely doesn't exist. The fix isn't a better check, it's removing the need for one: keep <code>mariadb-install-db</code> one-time-gated (that part really is destructive to repeat), but make the user/grant SQL block <em>unconditional and idempotent</em> on every start (<code>CREATE ... IF NOT EXISTS</code>, re-asserted <code>GRANT</code>, re-asserted <code>ALTER USER</code> with the same password) so a partial first failure self-heals on the next restart instead of freezing into a permanently broken state.</p>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-num">11</span>
+    <div class="step-content">
+      <p><strong>php-fpm listening on a unix socket.</strong> Works fine if NGINX and php-fpm are in the same container — but the subject explicitly forbids that. Across containers, php-fpm must listen on a TCP port NGINX can reach by service name.</p>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-num">12</span>
+    <div class="step-content">
+      <p><strong>Bind-mounting the volumes directly.</strong> Writing <code>- /home/login/data/db:/var/lib/mysql</code> under a service's <code>volumes:</code> is a bind mount, which the subject forbids for these two volumes. Define them as named volumes with <code>driver_opts</code> pinning the host path instead.</p>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-num">13</span>
+    <div class="step-content">
+      <p><strong>Committing secrets by accident.</strong> A password that ever touches Git history counts, even if you remove it in a later commit — rewrite history or start a fresh repo if this happens. Keep <code>secrets/</code> and <code>.env</code> in <code>.gitignore</code> from the very first commit.</p>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-num">14</span>
+    <div class="step-content">
+      <p><strong>Forgetting the admin username restriction.</strong> "admin123" and "Administrator-2" both still contain the forbidden substring. Validate case-insensitively against "admin" and "administrator" before creating the account.</p>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-num">15</span>
+    <div class="step-content">
+      <p><strong>Installing <code>npm</code> via Debian/Ubuntu's apt package.</strong> Unlike most system packages, Debian's <code>npm</code> depends on close to thirty separate unbundled <code>node-*</code> packages rather than vendoring its own dependencies — and that dependency graph is prone to failing to resolve at all (<code>E: Unable to correct problems, you have held broken packages</code>), independent of <code>--no-install-recommends</code>. If your Node.js container doesn't actually need external packages, skip <code>npm</code> entirely and install only <code>nodejs</code>. If you genuinely need packages, installing Node from the official upstream binary tarball (matching the pattern this project already uses for WP-CLI and Adminer — fetch the real artifact directly rather than trust the distro's repackaging) sidesteps the problem entirely.</p>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-num">16</span>
+    <div class="step-content">
+      <p><strong>NGINX logging to files instead of <code>docker logs</code>.</strong> Debian's packaged nginx defaults its <code>access_log</code> and <code>error_log</code> to real files under <code>/var/log/nginx/</code> whenever a custom <code>nginx.conf</code> doesn't say otherwise — a container running perfectly well can still show a completely empty <code>docker logs nginx</code>, since every request and every error is being written INSIDE the container's filesystem instead of to its stdout/stderr. Confirmed directly: with the directives omitted, a real 502 and its matching upstream-connection error were both silently absent from the container's own output while landing correctly in the log files. The official nginx Docker image works around this with symlinks; building nginx from a bare Debian base means adding <code>access_log /dev/stdout;</code> and <code>error_log /dev/stderr;</code> explicitly.</p>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-num">17</span>
+    <div class="step-content">
+      <p><strong>Same bug, different service: php-fpm's own log also defaults to a file.</strong> Debian's packaged <code>php-fpm.conf</code> sets <code>error_log = /var/log/php8.2-fpm.log</code> by default — independent of the pool-level <code>www.conf</code> this project already overrides, and independent of <code>catch_workers_output</code>, which only controls whether worker output reaches php-fpm's own log in the first place, not where that log ends up. The fix is a single flag on the final <code>exec</code>: <code>php-fpm8.2 -F -O</code>, where <code>-O</code>/<code>--force-stderr</code> forces php-fpm's own logging to stderr even though it isn't a TTY. Worth checking for MariaDB too — but <code>mysqld</code> already defaults to stderr on its own when no <code>log-error</code> path is configured, confirmed directly rather than assumed, so no equivalent fix was needed there.</p>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-num">18</span>
+    <div class="step-content">
+      <p><strong>A <code>bonus</code> target that adds a second compose file, without teaching <code>down</code> about it.</strong> If <code>make bonus</code> starts services via <code>-f docker-compose.yml -f docker-compose.bonus.yml</code>, but <code>down</code>/<code>clean</code>/<code>fclean</code> only ever reference the mandatory file, those teardown targets become structurally unable to see the bonus containers at all — not a permissions issue, not a naming issue, just Compose only knowing about what it's told. Sharing the same project name doesn't help; <code>down</code> operates on the services defined in whatever file(s) it's given, not on "everything with this label." The fix is symmetry: reference both files in every target that manages existing containers (<code>down</code>, <code>clean</code>, <code>fclean</code>, and for consistency <code>logs</code>/<code>ps</code> too), while leaving <code>up</code>/<code>all</code> mandatory-only so the bonus/mandatory evaluation split the subject requires stays intact. Referencing both files is safe even when bonus was never started — Compose just finds nothing to do for services with no running containers.</p>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-num">19</span>
+    <div class="step-content">
+      <p><strong>FTP passive mode reporting an address no client outside the container can reach.</strong> Without <code>pasv_address</code> set, vsftpd tells the connecting client which IP to use for the data connection based on <code>getsockname()</code> on the control socket — inside a container, that's the container's own bridge-network IP (<code>172.18.0.x</code>-style), not anything published to the host. The control connection and login succeed normally, since those ride the already-established, already-forwarded connection; only the <em>data</em> connection — the one actually needed for a directory listing or a file transfer — tries to dial an address that doesn't exist from the client's side, and hangs. Pin <code>pasv_address</code> to whatever address clients will actually be connecting from: <code>127.0.0.1</code> for testing from the same VM the containers run on, a real routable address if genuinely external clients need to reach it.</p>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-num">20</span>
+    <div class="step-content">
+      <p><strong>A bare <code>500</code> where vsftpd's <code>220</code> greeting should be.</strong> vsftpd installs its own per-connection syscall sandbox via <code>prctl(PR_SET_SECCOMP, ...)</code>, layered on top of whatever the OS already restricts. Docker's own default seccomp profile on the container conflicts with vsftpd trying to nest a second filter inside it — the TCP connection is accepted, but vsftpd's internal sandbox setup fails before it can even send the greeting, so the client sees a bare <code>500</code> instead of the expected <code>220</code>. Confirmed directly: the exact same config, user setup, and connection sequence worked flawlessly when vsftpd ran directly on a bare host, and every actively-maintained Docker vsftpd image out there carries the same one-line fix — <code>seccomp_sandbox=NO</code> — for exactly this reason.</p>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-num">21</span>
+    <div class="step-content">
+      <p><strong>A second, different <code>500</code> hiding right behind the first one.</strong> Fixing the seccomp issue above surfaces a genuinely separate failure: <code>500 OOPS: vsftpd: not found: directory given in 'secure_chroot_dir':/var/run/vsftpd/empty</code> — the exact same class of bug as <code>/run/php</code> and <code>/run/mysqld</code> earlier in this list, just a third daemon with its own <code>tmpfiles.d</code> rule that only fires under <code>systemd-tmpfiles</code>. Worth internalizing as a general check, not just three isolated fixes: any Debian-packaged daemon might have a file under <code>/usr/lib/tmpfiles.d/&lt;name&gt;.conf</code> specifying a runtime directory it expects to already exist — <code>dpkg -L &lt;package&gt; | grep tmpfiles</code> or a direct look in that directory catches this before it costs a debugging round instead of after.</p>
+    </div>
+  </div>
+</section>
+
+
+<section id="eval-readiness">
+  <h2><i class="ti ti-clipboard-check"></i>Evaluation readiness</h2>
+  <p>42 evaluation sheets for Inception are built directly from the subject PDF — they turn each written requirement into a hands-on test an evaluator physically runs, plus oral defense questions about the design choices. This section maps the file set in this guide against that hands-on process, item by item.</p>
+
+  <table>
+    <tr><th>What an evaluator does</th><th>Where it's satisfied</th></tr>
+    <tr><td><code>ls -alR</code> at the repo root, checks folder/file names</td><td>Matches the <a href="#directory">directory layout</a> exactly, including <code>srcs/requirements/&lt;service&gt;</code> and a root-level <code>secrets/</code></td></tr>
+    <tr><td>Runs <code>make</code>, watches it build and start</td><td>Makefile creates host data dirs, then <code>docker compose up --build -d</code></td></tr>
+    <tr><td><code>docker ps</code> — checks image name matches service name, containers are named clearly</td><td><code>image:</code> and <code>container_name:</code> set identically per service</td></tr>
+    <tr><td>Kills a container (<code>docker kill mariadb</code>), checks it restarts on its own</td><td><code>restart: on-failure</code> on every mandatory service</td></tr>
+    <tr><td><code>docker exec &lt;container&gt; ps aux</code> — checks PID 1 is the real daemon, not a shell or wrapper</td><td>Every entrypoint ends in <code>exec</code>, replacing the script's own process image with mysqld / php-fpm / nginx / vsftpd</td></tr>
+    <tr><td>Greps every Dockerfile/entrypoint for <code>tail -f</code>, bare <code>bash</code>, <code>sleep infinity</code>, <code>while true</code></td><td>None present as actual commands — verified by grep before every revision shipped here</td></tr>
+    <tr><td><code>curl</code> / <code>openssl s_client</code> against port 443, tries TLS 1.0/1.1 and expects rejection, tries port 80 and expects nothing listening</td><td><code>ssl_protocols TLSv1.2 TLSv1.3;</code> only, no <code>listen 80</code> block anywhere in nginx.conf</td></tr>
+    <tr><td><code>docker network inspect inception</code> — checks all three containers are attached, driver is bridge</td><td>Confirmed — one custom bridge network, no <code>host</code>, no <code>--link</code></td></tr>
+    <tr><td><code>docker volume inspect</code> — checks the volumes are real named volumes with a Mountpoint under <code>/home/&lt;login&gt;/data</code></td><td><code>driver_opts</code> with <code>type: none, o: bind</code> gives a Docker-managed named volume pinned to that host path</td></tr>
+    <tr><td>Logs into MariaDB, checks <code>wp_users</code> has two rows, one admin with a compliant username</td><td>Enforced at setup time — <code>setup_wp.sh</code> refuses to proceed if the admin username contains "admin"</td></tr>
+    <tr><td><code>git log -p -- secrets/ .env</code> or similar — checks no credentials ever touched the repo</td><td><code>secrets/</code> and <code>srcs/.env</code> are gitignored from the first line of <code>.gitignore</code></td></tr>
+    <tr><td>Stops a container gracefully (<code>docker stop</code>), checks it doesn't hang until the SIGKILL timeout</td><td>Real daemons as PID 1 (via <code>exec</code>) handle SIGTERM correctly — no shell wrapper in the way</td></tr>
+    <tr><td>Runs <code>make fclean &amp;&amp; make re</code>, checks no stale containers/volumes survive</td><td>Compose project name is pinned with <code>-p inception</code> so <code>docker compose down -v</code> resolves the real volume names deterministically — see the callout in the <a href="#makefile">Makefile section</a> for the bug this fixes</td></tr>
+    <tr><td>Oral defense: "why secrets over env vars", "why not <code>network: host</code>", "explain PID 1", "named volume vs bind mount"</td><td>Each is answered directly in the <a href="#readme">README's design-choices section</a></td></tr>
+  </table>
+
+  <div class="callout callout-rule">
+    <i class="ti ti-flag-3"></i>
+    <div>
+      <p><strong>Bottom line:</strong> every mechanical check above passes against the files in this guide. What determines an actual pass is out of scope for any static file review — an evaluator runs this hands-on, on your VM, with your real credentials, and asks you to explain choices out loud. Build these files in your own repository, replace every <code>login</code> placeholder with your own 42 login, run <code>make</code> yourself, click through the setup, and be ready to explain <em>why</em> each piece is built the way it is — not just that it works.</p>
+    </div>
+  </div>
+</section>
+
+
+<section id="resources">
+  <h2><i class="ti ti-external-link"></i>Resources</h2>
+  <ul class="resource-list">
+    <li><i class="ti ti-brand-docker"></i><a href="https://docs.docker.com/reference/dockerfile/" target="_blank">Dockerfile reference</a><span>docs.docker.com</span></li>
+    <li><i class="ti ti-brand-docker"></i><a href="https://docs.docker.com/reference/compose-file/" target="_blank">Compose file reference</a><span>docs.docker.com</span></li>
+    <li><i class="ti ti-brand-docker"></i><a href="https://docs.docker.com/engine/storage/volumes/" target="_blank">Docker volumes</a><span>docs.docker.com</span></li>
+    <li><i class="ti ti-brand-docker"></i><a href="https://docs.docker.com/engine/swarm/secrets/" target="_blank">Docker secrets</a><span>docs.docker.com</span></li>
+    <li><i class="ti ti-brand-docker"></i><a href="https://docs.docker.com/engine/network/" target="_blank">Docker networking</a><span>docs.docker.com</span></li>
+    <li><i class="ti ti-package"></i><a href="https://www.debian.org/releases/" target="_blank">Debian releases</a><span>check current/penultimate stable</span></li>
+    <li><i class="ti ti-package"></i><a href="https://wiki.debian.org/DebianReleases" target="_blank">Debian wiki — releases</a><span>oldstable/stable/testing explained</span></li>
+    <li><i class="ti ti-brand-wordpress"></i><a href="https://wp-cli.org/" target="_blank">WP-CLI documentation</a><span>wp-cli.org</span></li>
+    <li><i class="ti ti-server-2"></i><a href="https://nginx.org/en/docs/" target="_blank">NGINX documentation</a><span>nginx.org</span></li>
+    <li><i class="ti ti-database"></i><a href="https://mariadb.com/kb/en/documentation/" target="_blank">MariaDB Knowledge Base</a><span>mariadb.com</span></li>
+    <li><i class="ti ti-tool"></i><a href="https://www.adminer.org/" target="_blank">Adminer</a><span>adminer.org</span></li>
+  </ul>
+</section>
+
+
+  </div>
+
+  <footer>
+    Built as a study reference for the 42 Inception subject. Verify current Debian release numbers and your own 42 login before submitting — see the compliance checklist.
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-docker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-ini.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-nginx.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-makefile.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+<script>
+Prism.highlightAll();
+
+function copyCode(id, btn){
+  const el = document.getElementById(id);
+  const text = el.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const original = btn.innerHTML;
+    btn.innerHTML = '<i class="ti ti-check"></i>Copied';
+    setTimeout(() => { btn.innerHTML = original; }, 1500);
+  });
+}
+
+const sections = document.querySelectorAll('section[id]');
+const links = document.querySelectorAll('.nav-link');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-15% 0px -75% 0px' });
+sections.forEach(s => observer.observe(s));
+
+links.forEach(l => l.addEventListener('click', () => document.getElementById('sidebar').classList.remove('open')));
+</script>
+</body>
+</html>
