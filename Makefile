@@ -1,32 +1,35 @@
+COMPOSE = docker compose
+SRCS = srcs/docker-compose.yml
+BONUS = srcs/docker-compose.bonus.yml
+
 .PHONY: all setup up bonus down logs ps clean fclean re
 
 all: setup up
 
 setup:
-	mkdir -p /home/alebarbo/data/db
-	mkdir -p /home/alebarbo/data/wordpress
+	mkdir -p ./data/db
+	mkdir -p ./data/wordpress
 
 up:
-	docker compose -p inception -f srcs/docker-compose.yml up --build -d
+	$(COMPOSE) -f $(SRCS) up --build -d
 
 bonus:
-	docker compose -p inception -f srcs/docker-compose.yml -f srcs/docker-compose.bonus.yml up --build -d
+	$(COMPOSE) -f $(SRCS) -f $(BONUS) up --build -d
 
 down:
-	docker compose -p inception -f srcs/docker-compose.yml -f srcs/docker-compose.bonus.yml down
+	$(COMPOSE) -f $(SRCS) -f $(BONUS) down
 
 logs:
-	docker compose -p inception -f srcs/docker-compose.yml -f srcs/docker-compose.bonus.yml logs -f
+	$(COMPOSE) -f $(SRCS) -f $(BONUS) logs
 
 ps:
-	docker compose -p inception -f srcs/docker-compose.yml -f srcs/docker-compose.bonus.yml ps
+	$(COMPOSE) -f $(SRCS) -f $(BONUS) ps
 
-clean: down
-	docker image rm -f nginx wordpress mariadb redis ftp static-site adminer monilite 2>/dev/null || true
+clean:
+	$(COMPOSE) -f $(SRCS) -f $(BONUS) down -v --rmi all --remove-orphans
 
 fclean: clean
-	docker compose -p inception -f srcs/docker-compose.yml -f srcs/docker-compose.bonus.yml down -v
-	rm -rf /home/alebarbo/data/db/*
-	rm -rf /home/alebarbo/data/wordpress/*
+	rm -rf ./data/
+	rm -rf ./data/
 
 re: fclean all

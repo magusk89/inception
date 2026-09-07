@@ -61,13 +61,13 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/alebarbo/data/db
+      device: ./data/db
   wp_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/alebarbo/data/wordpress
+      device: ./data/wordpress
 
 secrets:
   db_password:
