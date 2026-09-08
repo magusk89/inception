@@ -10,7 +10,7 @@ mkdir -p /var/run/vsftpd/empty
 chmod 0755 /var/run/vsftpd/empty
 chown root:root /var/run/vsftpd/empty
 
-if ! id "${FTP_USER}" >/dev/null 2>&1; then
+if ! id "${FTP_USER}"; then
     adduser --disabled-password --gecos "" --home /var/www/html "${FTP_USER}"
     echo "${FTP_USER}:${FTP_PASS}" | chpasswd
     echo "${FTP_USER}" >> /etc/vsftpd.user_list

@@ -11,8 +11,6 @@ WP_PATH="/var/www/html"
 DB_PASSWORD=$(cat /run/secrets/db_password)
 WP_ADMIN_USER=$(sed -n '1p' /run/secrets/credentials)
 WP_ADMIN_PASS=$(sed -n '2p' /run/secrets/credentials)
-WP_USER2=$(sed -n '3p' /run/secrets/credentials)
-WP_USER2_PASS=$(sed -n '4p' /run/secrets/credentials)
 
 case "$(echo "$WP_ADMIN_USER" | tr '[:upper:]' '[:lower:]')" in
     *admin*)
@@ -23,7 +21,7 @@ esac
 
 echo "waiting for database"
 i=0
-until php8.2 -r "exit(@fsockopen('mariadb', 3306) ? 0 : 1);" 2>/dev/null; do
+until php8.2 -r "exit(@fsockopen('mariadb', 3306) ? 0 : 1);"; do
     i=$((i + 1))
     if [ "$i" -ge 60 ]; then
         echo "database not reachable after 60s"
@@ -52,7 +50,7 @@ if [ ! -f "${WP_PATH}/wp-config.php" ]; then
         --allow-root
 fi
 
-if ! wp core is-installed --allow-root 2>/dev/null; then
+if ! wp core is-installed --allow-root; then
     echo "running install"
     wp core install \
         --url="https://${DOMAIN_NAME}" \

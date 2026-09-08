@@ -21,7 +21,7 @@ mysqld --user=mysql --datadir="${DB_DATA_DIR}" --skip-networking &
 TMP_PID=$!
 
 i=0
-until mysqladmin --user=root --password="${DB_ROOT_PASSWORD}" ping >/dev/null 2>&1; do
+until mysqladmin --user=root --password="${DB_ROOT_PASSWORD}" ping; do
     i=$((i + 1))
     if [ "$i" -ge 30 ]; then
         echo "bootstrap mysqld did not come up"

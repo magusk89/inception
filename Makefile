@@ -7,8 +7,8 @@ BONUS = srcs/docker-compose.bonus.yml
 all: setup up
 
 setup:
-	mkdir -p ./data/db
-	mkdir -p ./data/wordpress
+	mkdir -p ~/data/db
+	mkdir -p ~/data/wordpress
 
 up:
 	$(COMPOSE) -f $(SRCS) up --build -d
@@ -29,7 +29,7 @@ clean:
 	$(COMPOSE) -f $(SRCS) -f $(BONUS) down -v --rmi all --remove-orphans
 
 fclean: clean
-	rm -rf ./data/
-	rm -rf ./data/
+	rm -rf ~/data/db
+	rm -rf ~/data/wordpress
 
 re: fclean all
