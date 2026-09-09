@@ -59,7 +59,7 @@ single custom bridge network (`inception`) and never `network: host`.
 arbitrary host path with no lifecycle management. A named volume is
 managed by Docker end-to-end and can still be pinned to a specific host
 path via `driver_opts`. This project uses two named volumes, `db_data`
-and `wp_data`, both pinned to `/home/alebarbo/data/`.
+and `wp_data`, both pinned to `~/data/`.
 
 ## Bonus
 
@@ -88,13 +88,6 @@ mandatory site. It's also directly useful for this project specifically:
 a way to actually watch the VM's resource usage while the stack runs,
 which is the kind of thing you'd otherwise have to SSH in and check
 manually.
-
-One caveat worth knowing for defense: MONILite has no authentication of
-its own (confirmed in its documented API surface), and it runs on
-Flask's built-in development server rather than a production WSGI
-server — both reasonable trade-offs for a personal learning VM behind
-TLS, not something to expose on a public-facing host without adding an
-auth layer at the NGINX level first.
 
 Bonus services are not started by the default `make` target, since the
 subject only evaluates the bonus part once the mandatory part is
