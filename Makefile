@@ -29,7 +29,7 @@ clean:
 	$(COMPOSE) -f $(SRCS) -f $(BONUS) down -v --rmi all --remove-orphans
 
 fclean: clean
-	rm -rf ~/data/db
-	rm -rf ~/data/wordpress
+	sudo rm -rf ~/data/db
+	sudo rm -rf ~/data/wordpress
 
 re: fclean all

@@ -14,7 +14,7 @@ chown mysql:mysql /run/mysqld
 
 if [ ! -d "${DB_DATA_DIR}/mysql" ]; then
     echo "initialising data directory"
-    mariadb-install-db --user=mysql --datadir="${DB_DATA_DIR}" > /dev/null
+    mariadb-install-db --user=mysql --datadir="${DB_DATA_DIR}"
 fi
 
 mysqld --user=mysql --datadir="${DB_DATA_DIR}" --skip-networking &
@@ -36,6 +36,11 @@ mysql --user=root --password="${DB_ROOT_PASSWORD}" <<-EOSQL
     ALTER USER '${MYSQL_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
     GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%';
     ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASSWORD}';
+    SET @drop_stmt = CONCAT('DROP USER IF EXISTS ''''@''', @@hostname, '''');
+    PREPARE stmt FROM @drop_stmt;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+    DROP USER IF EXISTS ''@'localhost';
     FLUSH PRIVILEGES;
 EOSQL
 
