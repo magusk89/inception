@@ -11,6 +11,8 @@ WP_PATH="/var/www/html"
 DB_PASSWORD=$(cat /run/secrets/db_password)
 WP_ADMIN_USER=$(sed -n '1p' /run/secrets/credentials)
 WP_ADMIN_PASS=$(sed -n '2p' /run/secrets/credentials)
+WP_USER2=$(sed -n '3p' /run/secrets/credentials)
+WP_USER2_PASS=$(sed -n '4p' /run/secrets/credentials)
 
 case "$(echo "$WP_ADMIN_USER" | tr '[:upper:]' '[:lower:]')" in
     *admin*)
