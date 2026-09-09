@@ -1,7 +1,5 @@
 FROM debian:12-slim
 
-ENV DEBIAN_FRONTEND=noninteractive
-
 RUN printf '#!/bin/sh\nexit 101\n' > /usr/sbin/policy-rc.d \
     && chmod +x /usr/sbin/policy-rc.d
 
