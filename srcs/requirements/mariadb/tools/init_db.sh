@@ -3,8 +3,8 @@ set -e
 
 DB_DATA_DIR="/var/lib/mysql"
 
-DB_ROOT_PASSWORD=$(sed -n '1p' /run/secrets/db_root_password)
-DB_PASSWORD=$(sed -n '1p' /run/secrets/db_password)
+DB_ROOT_PASSWORD=$(tr -d '\r\n' < /run/secrets/db_root_password)
+DB_PASSWORD=$(tr -d '\r\n' < /run/secrets/db_password)
 
 : "${MYSQL_DATABASE:?MYSQL_DATABASE not set}"
 : "${MYSQL_USER:?MYSQL_USER not set}"

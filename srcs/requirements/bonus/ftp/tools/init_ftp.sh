@@ -1,8 +1,8 @@
 #!/bin/sh
 set -e
 
-FTP_USER=$(sed -n '1p' /run/secrets/ftp_credentials)
-FTP_PASS=$(sed -n '2p' /run/secrets/ftp_credentials)
+FTP_USER=$(sed -n '1p' /run/secrets/ftp_credentials | tr -d '\r\n')
+FTP_PASS=$(sed -n '2p' /run/secrets/ftp_credentials | tr -d '\r\n')
 
 touch /etc/vsftpd.user_list
 
