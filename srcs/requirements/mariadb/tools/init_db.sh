@@ -3,8 +3,8 @@ set -e
 
 DB_DATA_DIR="/var/lib/mysql"
 
-DB_ROOT_PASSWORD=$(cat /run/secrets/db_root_password)
-DB_PASSWORD=$(cat /run/secrets/db_password)
+DB_ROOT_PASSWORD=$(sed -n '1p' /run/secrets/db_root_password)
+DB_PASSWORD=$(sed -n '1p' /run/secrets/db_password)
 
 : "${MYSQL_DATABASE:?MYSQL_DATABASE not set}"
 : "${MYSQL_USER:?MYSQL_USER not set}"
@@ -36,11 +36,6 @@ mysql --user=root --password="${DB_ROOT_PASSWORD}" <<-EOSQL
     ALTER USER '${MYSQL_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
     GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%';
     ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASSWORD}';
-    SET @drop_stmt = CONCAT('DROP USER IF EXISTS ''''@''', @@hostname, '''');
-    PREPARE stmt FROM @drop_stmt;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
-    DROP USER IF EXISTS ''@'localhost';
     FLUSH PRIVILEGES;
 EOSQL
 
