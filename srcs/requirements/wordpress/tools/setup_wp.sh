@@ -8,7 +8,7 @@ WP_PATH="/var/www/html"
 : "${MYSQL_USER:?MYSQL_USER not set}"
 : "${WP_TITLE:?WP_TITLE not set}"
 
-DB_PASSWORD=$(cat /run/secrets/db_password)
+DB_PASSWORD=$(sed -n '1p' /run/secrets/db_password)
 WP_ADMIN_USER=$(sed -n '1p' /run/secrets/credentials)
 WP_ADMIN_PASS=$(sed -n '2p' /run/secrets/credentials)
 WP_USER2=$(sed -n '3p' /run/secrets/credentials)
