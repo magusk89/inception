@@ -8,7 +8,7 @@ Compose plugin.
 1. Clone the repository.
 2. `secrets/` and `srcs/.env` already contain working values for local
    testing — replace them with your own before any real submission.
-3. Add `127.0.0.1 alebarbo.42.fr` to `/etc/hosts` on the VM.
+3. Add `127.0.0.1 login.42.fr` to `/etc/hosts` on the VM.
 
 ## Building and launching with the Makefile / Compose
 
@@ -25,16 +25,16 @@ The Makefile pins the Compose project name to `inception`, so use the
 same flag when running Compose commands directly:
 
 ```
-docker compose -p inception -f srcs/docker-compose.yml ps
-docker compose -p inception -f srcs/docker-compose.yml logs -f <service>
-docker compose -p inception -f srcs/docker-compose.yml exec mariadb sh
+docker compose -f srcs/docker-compose.yml ps
+docker compose -f srcs/docker-compose.yml logs -f <service>
+docker compose -f srcs/docker-compose.yml exec mariadb sh
 docker volume inspect inception_db_data
 ```
 
 To rebuild a single service after editing its Dockerfile:
 
 ```
-docker compose -p inception -f srcs/docker-compose.yml up --build -d <service>
+docker compose-f srcs/docker-compose.yml up --build -d <service>
 ```
 
 ## Where data is stored and how it persists
@@ -62,7 +62,7 @@ make bonus
 which runs:
 
 ```
-docker compose -p inception -f srcs/docker-compose.yml -f srcs/docker-compose.bonus.yml up --build -d
+docker compose -f srcs/docker-compose.yml -f srcs/docker-compose.bonus.yml up --build -d
 ```
 
 Compose merges both files into one configuration by name: the bonus
@@ -88,6 +88,6 @@ flags to any Compose command, since `down`/`logs`/`ps` need to know
 about both files to see the bonus services:
 
 ```
-docker compose -p inception -f srcs/docker-compose.yml -f srcs/docker-compose.bonus.yml down
-docker compose -p inception -f srcs/docker-compose.yml -f srcs/docker-compose.bonus.yml logs -f ftp
+docker compose -f srcs/docker-compose.yml -f srcs/docker-compose.bonus.yml down
+docker compose -f srcs/docker-compose.yml -f srcs/docker-compose.bonus.yml logs -f ftp
 ```
